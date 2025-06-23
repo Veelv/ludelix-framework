@@ -1,12 +1,32 @@
 {
     "name": "ludelix/framework",
-    "description": "The Ludelix Framework - Modern PHP framework",
+    "version": "1.0.0",
+    "description": "Modern PHP framework for scalable web applications with SPA integration, multi-tenancy, and observability",
     "type": "library",
     "license": "MIT",
+    "keywords": [
+        "framework",
+        "php",
+        "spa",
+        "multi-tenant",
+        "observability",
+        "bridge",
+        "sharp-template",
+        "ludelix-connect"
+    ],
+    "homepage": "https://ludelix.com",
+    "support": {
+        "issues": "https://github.com/Veelv/ludelix-framework/issues",
+        "source": "https://github.com/Veelv/ludelix-framework",
+        "docs": "https://ludelix.com/docs",
+        "chat": "https://discord.gg/ludelix"
+    },
     "authors": [
         {
-            "name": "Ludelix Team",
-            "email": "team@ludelix.com"
+            "name": "Veelv Team",
+            "email": "team@ludelix.com",
+            "homepage": "https://ludelix.com",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -44,12 +64,44 @@
     },
     "scripts": {
         "test": "phpunit",
-        "analyse": "phpstan analyse"
+        "test:coverage": "phpunit --coverage-html coverage",
+        "test:unit": "phpunit --testsuite=Unit",
+        "test:integration": "phpunit --testsuite=Integration",
+        "analyse": "phpstan analyse",
+        "analyse:baseline": "phpstan analyse --generate-baseline",
+        "cs:check": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "ci": [
+            "@test",
+            "@analyse"
+        ]
+    },
+    "scripts-descriptions": {
+        "test": "Run all tests",
+        "test:coverage": "Run tests with coverage report",
+        "analyse": "Run static analysis",
+        "cs:fix": "Fix code style issues",
+        "ci": "Run CI pipeline locally"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "sort-packages": true,
-        "optimize-autoloader": true
-    }
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        }
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/ludelix"
+        }
+    ]
 }

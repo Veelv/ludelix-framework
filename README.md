@@ -149,14 +149,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌟 Why Ludelix?
 
-| Feature | Laravel | Ludelix |
-|---------|---------|----------|
-| Templates | Blade | **SharpTemplate (.ludou)** |
-| Service Access | Facades | **Bridge System** |
-| SPA Integration | Inertia.js | **LudelixConnect** |
-| Multi-Tenancy | External Package | **Native Support** |
-| Observability | External Tools | **Built-in OpenTelemetry** |
-| Frontend | Separate Setup | **Unified Vite Integration** |
+### Modern Architecture
+- **SharpTemplate (.ludou)** - Reactive templates with hot reload
+- **Bridge System** - Type-safe contextual service access
+- **LudelixConnect** - Advanced SPA integration with SSR
+- **Native Multi-Tenancy** - Built-in tenant isolation
+- **Integrated Observability** - OpenTelemetry and Prometheus ready
+- **Unified Frontend** - Single Vite configuration for all frameworks
 
 ---
 
