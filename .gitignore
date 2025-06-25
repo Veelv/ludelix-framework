@@ -31,3 +31,7 @@ clover.xml
 .env
 .env.local
 .env.*.local
+
+# Others
+/examples/
+/docs/
