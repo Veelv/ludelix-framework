@@ -1,0 +1,27 @@
+#extends['layouts/layout']
+
+#section content
+<div class="welcome-container">
+    <h1>#[t('welcome', ['name' => service('user')->name()])]</h1>
+    
+    #if($user->isAuthenticated())
+        <p>Welcome back, #[$user->name|upper]!</p>
+    #else
+        <p>Please log in to continue.</p>
+    #endif
+    
+    <div class="posts">
+        #foreach($posts as $post)
+            <article class="post">
+                <h2>#[$post->title|escape]</h2>
+                <p>#[$post->excerpt]</p>
+                <small>By #[$post->author->name] on #[$post->created_at]</small>
+            </article>
+        #endforeach
+    </div>
+    
+    <div id="app" data-page="#[connect('Home', ['user' => service('user'), 'slug' => service('str')->slug('Pagina Inicial')])]"></div>
+    
+    <script src="#[asset('js/app.js')]"></script>
+</div>
+#endsection

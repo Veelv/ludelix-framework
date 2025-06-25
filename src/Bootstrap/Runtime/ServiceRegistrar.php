@@ -9,6 +9,10 @@ class ServiceRegistrar
     protected ContainerInterface $container;
     protected array $providers = [
         \Ludelix\Bootstrap\Providers\ConfigProvider::class,
+        \Ludelix\Bootstrap\Providers\LudouProvider::class,
+        \Ludelix\Bootstrap\Providers\CoreServiceProvider::class,
+        \Ludelix\Bridge\BridgeServiceProvider::class,
+        \Ludelix\Connect\ConnectServiceProvider::class,
         \Ludelix\Bootstrap\Providers\DatabaseProvider::class,
         \Ludelix\Bootstrap\Providers\CacheProvider::class,
         \Ludelix\Bootstrap\Providers\ConsoleProvider::class,

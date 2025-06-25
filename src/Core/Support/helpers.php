@@ -53,8 +53,8 @@ if (!function_exists('config_path')) {
     }
 }
 
-if (!function_exists('storage_path')) {
-    function storage_path(string $path = ''): string
+if (!function_exists('cubby_path')) {
+    function cubby_path(string $path = ''): string
     {
         return app()->storagePath() . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
