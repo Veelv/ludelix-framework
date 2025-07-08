@@ -12,7 +12,7 @@ class Encrypter
     protected string $key;
     protected string $cipher;
 
-    public function __construct(string $key, string $cipher = 'AES-256-CBC')
+    public function __construct(string $key, string $cipher = 'aes-256-cbc')
     {
         $this->key = $key;
         $this->cipher = $cipher;
@@ -96,11 +96,11 @@ class Encrypter
     /**
      * Generate encryption key
      */
-    public static function generateKey(string $cipher = 'AES-256-CBC'): string
+    public static function generateKey(string $cipher = 'aes-256-cbc'): string
     {
         $length = match($cipher) {
-            'AES-128-CBC' => 16,
-            'AES-256-CBC' => 32,
+            'aes-128-cbc' => 16,
+            'aes-256-cbc' => 32,
             default => 32
         };
 

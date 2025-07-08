@@ -9,6 +9,7 @@ interface ContainerInterface extends PsrContainerInterface
     public function bind(string $abstract, mixed $concrete = null): void;
     public function singleton(string $abstract, mixed $concrete = null): void;
     public function instance(string $abstract, object $instance): void;
+    public function alias(string $alias, string $abstract): void;
     public function make(string $abstract, array $parameters = []): mixed;
     public function call(callable $callback, array $parameters = []): mixed;
     public function bound(string $abstract): bool;

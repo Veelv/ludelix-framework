@@ -1,18 +1,19 @@
 {
   "name": "ludelix/framework",
-  "version": "0.1.2",
-  "description": "Modern PHP framework for scalable web applications with SPA integration, multi-tenancy, and observability",
+  "description": "Modern PHP Framework with Multi-Tenancy, Advanced ORM, and SPA Integration",
   "type": "library",
   "license": "MIT",
   "keywords": [
     "framework",
     "php",
-    "spa",
     "multi-tenant",
-    "observability",
-    "bridge",
-    "sharp-template",
-    "ludelix-connect"
+    "orm",
+    "spa",
+    "websocket",
+    "graphql",
+    "cache",
+    "queue",
+    "template"
   ],
   "homepage": "https://ludelix.com",
   "support": {
@@ -30,24 +31,25 @@
     }
   ],
   "require": {
-    "php": "^8.1",
+    "php": ">=8.1",
     "ext-json": "*",
+    "ext-pdo": "*",
     "ext-mbstring": "*",
     "ext-openssl": "*",
-    "ext-pdo": "*",
+    "psr/log": "^3.0",
+    "psr/cache": "^3.0",
     "psr/container": "^2.0",
     "psr/http-message": "^2.0",
-    "psr/log": "^3.0",
-    "symfony/yaml": "^6.0",
-    "doctrine/annotations": "^2.0",
-    "ratchet/pawl": "^0.4",
-    "open-telemetry/api": "^1.0",
-    "promphp/prometheus_client_php": "^2.6"
+    "doctrine/dbal": "^3.0",
+    "symfony/console": "^6.0",
+    "symfony/process": "^6.0",
+    "monolog/monolog": "^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.0",
-    "mockery/mockery": "^1.5",
-    "phpstan/phpstan": "^1.10"
+    "phpstan/phpstan": "^1.10",
+    "squizlabs/php_codesniffer": "^3.7",
+    "vimeo/psalm": "^5.0"
   },
   "autoload": {
     "psr-4": {
@@ -64,44 +66,32 @@
   },
   "scripts": {
     "test": "phpunit",
-    "test:coverage": "phpunit --coverage-html coverage",
-    "test:unit": "phpunit --testsuite=Unit",
-    "test:integration": "phpunit --testsuite=Integration",
-    "analyse": "phpstan analyse",
-    "analyse:baseline": "phpstan analyse --generate-baseline",
-    "cs:check": "php-cs-fixer fix --dry-run --diff",
-    "cs:fix": "php-cs-fixer fix",
-    "ci": [
-      "@test",
-      "@analyse"
+    "test-coverage": "phpunit --coverage-html coverage",
+    "analyse": "phpstan analyse src --level=8",
+    "psalm": "psalm",
+    "cs-check": "phpcs src --standard=PSR12",
+    "cs-fix": "phpcbf src --standard=PSR12",
+    "quality": [
+      "@cs-check",
+      "@analyse",
+      "@psalm",
+      "@test"
     ]
   },
-  "scripts-descriptions": {
-    "test": "Run all tests",
-    "test:coverage": "Run tests with coverage report",
-    "analyse": "Run static analysis",
-    "cs:fix": "Fix code style issues",
-    "ci": "Run CI pipeline locally"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "config": {
-    "sort-packages": true,
     "optimize-autoloader": true,
     "preferred-install": "dist",
+    "sort-packages": true,
     "allow-plugins": {
       "composer/package-versions-deprecated": true
     }
   },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+
   "extra": {
     "branch-alias": {
       "dev-main": "1.0-dev"
     }
-  },
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/ludelix"
-    }
-  ]
+  }
 }

@@ -13,6 +13,7 @@ class Container implements ContainerInterface
     protected array $bindings = [];
     protected array $instances = [];
     protected array $resolved = [];
+    protected array $aliases = [];
 
     public function bind(string $abstract, mixed $concrete = null): void
     {
@@ -33,6 +34,11 @@ class Container implements ContainerInterface
     public function instance(string $abstract, object $instance): void
     {
         $this->instances[$abstract] = $instance;
+    }
+
+    public function alias(string $alias, string $abstract): void
+    {
+        $this->aliases[$alias] = $abstract;
     }
 
     public function get(string $id): mixed
@@ -88,11 +94,26 @@ class Container implements ContainerInterface
         $this->bindings = [];
         $this->instances = [];
         $this->resolved = [];
+        $this->aliases = [];
     }
 
     protected function getConcrete(string $abstract): mixed
     {
-        return $this->bindings[$abstract]['concrete'] ?? $abstract;
+        // Resolve aliases first
+        if (isset($this->aliases[$abstract])) {
+            $abstract = $this->aliases[$abstract];
+        }
+
+        // Follow alias chain until we hit a concrete class or closure
+        $concrete = $this->bindings[$abstract]['concrete'] ?? $abstract;
+        while (is_string($concrete) && isset($this->bindings[$concrete])) {
+            // Prevent infinite alias loops
+            if ($this->bindings[$concrete]['concrete'] === $concrete) {
+                break;
+            }
+            $concrete = $this->bindings[$concrete]['concrete'] ?? $concrete;
+        }
+        return $concrete;
     }
 
     protected function isBuildable(mixed $concrete, string $abstract): bool

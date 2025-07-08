@@ -22,7 +22,7 @@ class Authenticator
             'session_key' => 'auth_user',
             'remember_key' => 'remember_token',
             'max_attempts' => 5,
-            'lockout_time' => 900 // 15 minutes
+            'lockout_time' => 900
         ], $config);
     }
 
@@ -31,6 +31,10 @@ class Authenticator
      */
     public function attempt(array $credentials, bool $remember = false): bool
     {
+        if ($this->isLocked($credentials)) {
+            return false;
+        }
+
         $user = $this->retrieveByCredentials($credentials);
         
         if (!$user || !$this->validateCredentials($user, $credentials)) {
@@ -83,40 +87,19 @@ class Authenticator
             return $this->user;
         }
 
-        // Try session
         if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION[$this->config['session_key']])) {
             $this->user = $this->retrieveById($_SESSION[$this->config['session_key']]);
-            return $this->user;
         }
 
-        // Try remember token
-        $this->user = $this->retrieveByRememberToken();
         return $this->user;
     }
 
     /**
-     * Check if user is authenticated
+     * Check if authenticated
      */
     public function check(): bool
     {
         return $this->user() !== null;
-    }
-
-    /**
-     * Check if user is guest
-     */
-    public function guest(): bool
-    {
-        return !$this->check();
-    }
-
-    /**
-     * Get user ID
-     */
-    public function id(): ?int
-    {
-        $user = $this->user();
-        return $user['id'] ?? null;
     }
 
     /**
@@ -128,11 +111,10 @@ class Authenticator
     }
 
     /**
-     * Retrieve user by credentials
+     * Retrieve user by credentials (mock)
      */
     protected function retrieveByCredentials(array $credentials): ?array
     {
-        // Mock implementation - would query database
         $users = [
             ['id' => 1, 'email' => 'admin@example.com', 'password' => '$2y$12$example_hash'],
             ['id' => 2, 'email' => 'user@example.com', 'password' => '$2y$12$example_hash2']
@@ -148,11 +130,10 @@ class Authenticator
     }
 
     /**
-     * Retrieve user by ID
+     * Retrieve user by ID (mock)
      */
     protected function retrieveById(int $id): ?array
     {
-        // Mock implementation
         $users = [
             1 => ['id' => 1, 'email' => 'admin@example.com', 'name' => 'Admin'],
             2 => ['id' => 2, 'email' => 'user@example.com', 'name' => 'User']
@@ -167,11 +148,7 @@ class Authenticator
     protected function setRememberToken(array $user): void
     {
         $token = $this->hasher->generateToken();
-        
-        // Store token in cookie
-        setcookie($this->config['remember_key'], $token, time() + (30 * 24 * 60 * 60)); // 30 days
-        
-        // Would also store in database
+        setcookie($this->config['remember_key'], $token, time() + (30 * 24 * 60 * 60));
     }
 
     /**
@@ -180,21 +157,6 @@ class Authenticator
     protected function clearRememberToken(): void
     {
         setcookie($this->config['remember_key'], '', time() - 3600);
-    }
-
-    /**
-     * Retrieve user by remember token
-     */
-    protected function retrieveByRememberToken(): ?array
-    {
-        $token = $_COOKIE[$this->config['remember_key']] ?? null;
-        
-        if (!$token) {
-            return null;
-        }
-
-        // Would query database for token
-        return null;
     }
 
     /**
@@ -220,6 +182,15 @@ class Authenticator
         if (session_status() === PHP_SESSION_ACTIVE) {
             unset($_SESSION[$key], $_SESSION[$key . '_time']);
         }
+    }
+
+    /**
+     * Get user ID
+     */
+    public function id(): ?int
+    {
+        $user = $this->user();
+        return $user['id'] ?? null;
     }
 
     /**

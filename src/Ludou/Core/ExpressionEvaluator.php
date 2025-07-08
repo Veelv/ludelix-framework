@@ -16,7 +16,8 @@ class ExpressionEvaluator
     {
         $this->functions = array_merge([
             't' => [$this, 'translate'],
-            'choice' => [$this, 'choice']
+            'choice' => [$this, 'choice'],
+            'asset' => [$this, 'asset']
         ], $functions);
         $this->filters = $filters;
     }
@@ -126,5 +127,14 @@ class ExpressionEvaluator
         
         $index = $count === 1 ? 0 : 1;
         return $parts[$index] ?? $parts[0];
+    }
+
+    /**
+     * Get asset URL
+     */
+    public function asset(string $path): string
+    {
+        // Mock asset URL - would integrate with AssetManager
+        return '/assets/' . ltrim($path, '/');
     }
 }

@@ -19,6 +19,10 @@ class ConnectServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->container->singleton('events', function ($container) {
+            return new \Ludelix\Core\EventDispatcher();
+        });
+
         $this->container->singleton('connect.manager', function ($container) {
             return new ConnectManager(
                 $container->get('events'),
@@ -56,6 +60,37 @@ class ConnectServiceProvider extends ServiceProvider
                 $container->get('request'),
                 $container->get('config')->get('connect', [])
             );
+        });
+
+        $this->container->singleton('logger', function ($container) {
+            // Use PSR-3 logger if available, otherwise fallback to Ludelix\Core\Logger
+            if (class_exists('Monolog\\Logger')) {
+                return new \Monolog\Logger('ludelix');
+            }
+            return new class extends \Ludelix\Core\Logger implements \Psr\Log\LoggerInterface {
+                // Implement all PSR-3 methods delegating to Ludelix\Core\Logger
+                public function emergency($message, array $context = []): void { $this->log('emergency', $message, $context); }
+                public function alert($message, array $context = []): void { $this->log('alert', $message, $context); }
+                public function critical($message, array $context = []): void { $this->log('critical', $message, $context); }
+                public function error($message, array $context = []): void { $this->log('error', $message, $context); }
+                public function warning($message, array $context = []): void { $this->log('warning', $message, $context); }
+                public function notice($message, array $context = []): void { $this->log('notice', $message, $context); }
+                public function info($message, array $context = []): void { $this->log('info', $message, $context); }
+                public function debug($message, array $context = []): void { $this->log('debug', $message, $context); }
+                public function log($level, $message, array $context = []): void { parent::log($level, $message, $context); }
+            };
+        });
+
+        $this->container->singleton('cache', function ($container) {
+            // Recupera configuração de cache do container, se existir
+            $config = [];
+            if ($container->has('config')) {
+                $configService = $container->get('config');
+                if (is_object($configService) && method_exists($configService, 'get')) {
+                    $config = $configService->get('cache', []);
+                }
+            }
+            return new \Ludelix\Cache\CacheManager($config);
         });
 
         $this->container->alias('connect', Connect::class);
