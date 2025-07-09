@@ -1,65 +1,49 @@
 <?php
+
 namespace Ludelix\Bridge\Resolver;
 
+use Ludelix\Core\Container;
+use Ludelix\Bridge\Cache\BridgeCache;
+
 /**
- * Class ServiceResolver
- *
+ * Service Resolver
+ * 
  * Responsible for resolving and retrieving services from the application container.
- * Provides methods to get, check, and list services for dependency injection scenarios.
  */
 class ServiceResolver
 {
-    /**
-     * The application service container instance.
-     *
-     * @var object|null
-     */
-    protected $container;
+    protected Container $container;
+    protected BridgeCache $cache;
+    protected array $config;
 
-    /**
-     * ServiceResolver constructor.
-     *
-     * @param object|null $container
-     */
-    public function __construct($container = null)
+    public function __construct(Container $container, BridgeCache $cache = null, array $config = [])
     {
         $this->container = $container;
+        $this->cache = $cache ?? new BridgeCache();
+        $this->config = $config;
     }
 
-    /**
-     * Get a service by its identifier.
-     *
-     * @param string $id
-     * @return mixed|null
-     */
-    public function get(string $id)
+    public function resolve(string $service, array $context = []): mixed
     {
-        if ($this->container && method_exists($this->container, 'get')) {
-            return $this->container->get($id);
-        }
-        return null;
+        return $this->container->make($service);
     }
 
-    /**
-     * Check if a service exists in the container.
-     *
-     * @param string $id
-     * @return bool
-     */
+    public function canResolve(string $service, array $context = []): bool
+    {
+        return $this->container->bound($service) || class_exists($service);
+    }
+
+    public function get(string $id): mixed
+    {
+        return $this->container->get($id);
+    }
+
     public function has(string $id): bool
     {
-        if ($this->container && method_exists($this->container, 'has')) {
-            return $this->container->has($id);
-        }
-        return false;
+        return $this->container->has($id);
     }
 
-    /**
-     * Get the underlying container instance.
-     *
-     * @return object|null
-     */
-    public function getContainer()
+    public function getContainer(): Container
     {
         return $this->container;
     }

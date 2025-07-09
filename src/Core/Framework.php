@@ -74,7 +74,7 @@ class Framework implements FrameworkInterface
 
     public function version(): string
     {
-        return '1.0.0';
+        return '1.0.3';
     }
 
     public function basePath(): string

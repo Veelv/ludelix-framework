@@ -29,7 +29,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app/uploads'),
+            'root' => cubby_path('app/uploads'),
             'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'permissions' => [
@@ -46,7 +46,7 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => cubby_path('app/public'),
             'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],

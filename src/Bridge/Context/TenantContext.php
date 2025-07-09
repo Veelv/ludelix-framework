@@ -125,7 +125,26 @@ class TenantContext
      */
     public function isEnabled(): bool
     {
-        // You can add logic here to determine if the tenant context is active
         return $this->tenantId !== null;
+    }
+    
+    /**
+     * Create new instance with tenant
+     */
+    public function withTenant(string $tenantId): self
+    {
+        $clone = clone $this;
+        $clone->setTenantId($tenantId);
+        return $clone;
+    }
+    
+    /**
+     * Constructor with config
+     */
+    public function __construct(array $config = [])
+    {
+        if (isset($config['tenant_id'])) {
+            $this->tenantId = $config['tenant_id'];
+        }
     }
 }

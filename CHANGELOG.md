@@ -5,6 +5,35 @@ All notable changes to Ludelix Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2024-12-19
+
+### 🚨 Critical Fixes
+
+#### Fixed
+- **Fatal TypeError in ConnectManager** - Fixed stdClass being passed instead of CacheManager
+- **Cache Service Registration** - CacheProvider now returns proper CacheManager instance
+- **Service Loading Order** - ServiceRegistrar reordered to load CacheProvider before ConnectServiceProvider
+
+#### Added
+- **Bridge::response()** - HTTP response management with json(), redirect(), download() methods
+- **Bridge::asset()** - Asset management with asset(), css(), js(), image() methods
+- **storage_path() function** - Added as alias for cubby_path() for compatibility
+- **Complete Configuration Files** - Added app.php and database.php with full env() support
+
+#### Enhanced
+- **Framework Version** - Updated to 1.0.3
+- **Bridge System** - Enhanced with ResponseBuilder and AssetManager
+- **Context Management** - Improved tenant and request context handling
+- **Service Resolution** - Better caching and performance optimization
+
+#### Technical Details
+- Fixed ConnectManager constructor TypeError (Argument #2 must be CacheManager, stdClass given)
+- ServiceRegistrar now loads providers in correct order: Config → Cache → Connect
+- Added storage_path() function to helpers.php for Laravel-style compatibility
+- Enhanced Bridge facade with fluent response and asset management
+
+---
+
 ## [1.0.1] - 2024-01-XX
 
 ### 🔧 Bug Fixes and Improvements

@@ -16,7 +16,7 @@ return [
     'drivers' => [
         'file' => [
             'enabled' => true,
-            'path' => storage_path('cache'),
+            'path' => cubby_path('cache'),
             'ttl' => 3600,
         ],
 

@@ -28,7 +28,7 @@ class LocalAdapter implements StorageInterface
 
     public function __construct(array $config)
     {
-        $this->root = rtrim($config['root'] ?? storage_path('app/uploads'), '/');
+        $this->root = rtrim($config['root'] ?? cubby_path('app/uploads'), '/');
         $this->baseUrl = rtrim($config['url'] ?? '/storage', '/');
         $this->visibility = $config['visibility'] ?? 'public';
         $this->permissions = $config['permissions'] ?? [

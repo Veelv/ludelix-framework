@@ -299,7 +299,7 @@ class Bridge implements BridgeInterface
             $contextualInstance = $this->applyContextualTransformations($instance, $service);
             
             // Cache resolved instance with TTL based on service type
-            $this->cache->put(
+            $this->cache->set(
                 $cacheKey,
                 $contextualInstance,
                 $this->calculateCacheTTL($service)
@@ -535,6 +535,24 @@ class Bridge implements BridgeInterface
         return self::instance()->get('router');
     }
     
+    /**
+     * Response service for HTTP response management
+     * Provides fluent interface for creating and managing HTTP responses
+     */
+    public static function response(): mixed
+    {
+        return self::instance()->get('response');
+    }
+    
+    /**
+     * Asset manager for static asset handling
+     * Provides asset URL generation, versioning, and compilation support
+     */
+    public static function asset(): mixed
+    {
+        return self::instance()->get('asset');
+    }
+    
     // Protected helper methods for internal Bridge operations
     
     protected function initializeMiddleware(array $middlewareConfig): void
@@ -580,7 +598,7 @@ class Bridge implements BridgeInterface
     protected function applyContextualTransformations($instance, string $service): mixed
     {
         // Apply context transformations if service supports it
-        if (method_exists($instance, 'withContext')) {
+        if (is_object($instance) && method_exists($instance, 'withContext')) {
             return $instance->withContext($this->buildResolutionContext());
         }
         

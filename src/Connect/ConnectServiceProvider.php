@@ -81,17 +81,7 @@ class ConnectServiceProvider extends ServiceProvider
             };
         });
 
-        $this->container->singleton('cache', function ($container) {
-            // Recupera configuração de cache do container, se existir
-            $config = [];
-            if ($container->has('config')) {
-                $configService = $container->get('config');
-                if (is_object($configService) && method_exists($configService, 'get')) {
-                    $config = $configService->get('cache', []);
-                }
-            }
-            return new \Ludelix\Cache\CacheManager($config);
-        });
+
 
         $this->container->alias('connect', Connect::class);
     }

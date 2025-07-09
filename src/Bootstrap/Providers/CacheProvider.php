@@ -16,8 +16,14 @@ class CacheProvider
     public function register(): void
     {
         $this->container->singleton('cache', function ($container) {
-            // Cache implementation will be added later
-            return new \stdClass();
+            $config = ['default' => 'file', 'drivers' => ['file' => ['path' => 'storage/cache']]];
+            if ($container->has('config')) {
+                $configService = $container->get('config');
+                if (is_object($configService) && method_exists($configService, 'get')) {
+                    $config = $configService->get('cache', $config);
+                }
+            }
+            return new \Ludelix\Cache\CacheManager($config);
         });
     }
 

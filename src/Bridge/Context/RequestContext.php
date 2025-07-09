@@ -104,4 +104,16 @@ class RequestContext
         $this->parameters = [];
         $this->user = [];
     }
+    
+    /**
+     * Create new instance with request
+     */
+    public function withRequest($request): self
+    {
+        $clone = clone $this;
+        if (is_array($request)) {
+            $clone->setParameters($request);
+        }
+        return $clone;
+    }
 }
