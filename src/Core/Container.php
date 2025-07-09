@@ -48,7 +48,7 @@ class Container implements ContainerInterface
 
     public function has(string $id): bool
     {
-        return $this->bound($id);
+        return $this->bound($id) || class_exists($id);
     }
 
     public function make(string $abstract, array $parameters = []): mixed
@@ -81,7 +81,7 @@ class Container implements ContainerInterface
 
     public function bound(string $abstract): bool
     {
-        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]);
+        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]) || isset($this->aliases[$abstract]);
     }
 
     public function resolved(string $abstract): bool
@@ -135,6 +135,10 @@ class Container implements ContainerInterface
         try {
             $reflector = new ReflectionClass($concrete);
         } catch (\ReflectionException $e) {
+            // Return null for non-existent services instead of throwing
+            if (!class_exists($concrete)) {
+                return null;
+            }
             throw new class("Target class [$concrete] does not exist.", 0, $e) extends \Exception implements NotFoundExceptionInterface {};
         }
 
