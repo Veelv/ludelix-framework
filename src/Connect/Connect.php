@@ -301,9 +301,9 @@ class Connect implements ConnectInterface
      * Set shared properties with intelligent merging
      * 
      * @param array $shared Shared state data
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function share(array $shared): self
+    public function share(array $shared): ConnectInterface
     {
         $this->sharedProps = array_merge($this->sharedProps, $shared);
         
@@ -319,9 +319,9 @@ class Connect implements ConnectInterface
      * Enable/disable Server-Side Rendering
      * 
      * @param bool $enabled SSR enabled state
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function ssr(bool $enabled = true): self
+    public function ssr(bool $enabled = true): ConnectInterface
     {
         $this->ssrEnabled = $enabled;
         return $this;
@@ -331,9 +331,9 @@ class Connect implements ConnectInterface
      * Set root template for SPA mounting
      * 
      * @param string $template Template name
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function rootTemplate(string $template): self
+    public function rootTemplate(string $template): ConnectInterface
     {
         $this->rootTemplate = $template;
         return $this;
@@ -343,9 +343,9 @@ class Connect implements ConnectInterface
      * Configure WebSocket synchronization
      * 
      * @param array $config WebSocket configuration
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function websocket(array $config = []): self
+    public function websocket(array $config = []): ConnectInterface
     {
         $this->websocketConfig = array_merge($this->websocketConfig, $config);
         return $this;
@@ -374,23 +374,37 @@ class Connect implements ConnectInterface
     }
     
     /**
-     * Static factory methods for global access
+     * Static factory methods for global access and ludelix-connect compatibility
      */
     
     /**
-     * Create component response statically
+     * Render component (ludelix-connect compatibility)
      */
-    public static function component(string $component, array $props = [], array $shared = []): Response
+    public static function render(string $component, array $props = [], array $shared = []): Response
     {
         return self::instance()->component($component, $props, $shared);
     }
     
     /**
-     * Set shared props statically
+     * Set shared props statically (ludelix-connect compatibility)
      */
-    public static function share(array $shared): void
+    public static function shareGlobal(array|string $key, mixed $value = null): void
     {
-        self::instance()->share($shared);
+        $instance = self::instance();
+        
+        if (is_array($key)) {
+            $instance->share($key);
+        } else {
+            $instance->share([$key => $value]);
+        }
+    }
+    
+    /**
+     * Set version statically (ludelix-connect compatibility)
+     */
+    public static function version(string $version): void
+    {
+        self::instance()->version = $version;
     }
     
     /**

@@ -2,6 +2,10 @@
 
 Modern PHP Framework with Multi-Tenancy, Advanced ORM, SPA Integration, and Professional Architecture.
 
+[![Latest Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/ludelix/framework/releases)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.1-brightgreen.svg)](https://php.net/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 ## 🚀 Features
 
 ### Core Framework
@@ -77,6 +81,16 @@ app/
 └── Middleware/
     └── user.middleware.php      # UserMiddleware
 ```
+
+## 🆕 What's New in v1.0.1
+
+### 🔧 Bug Fixes and Improvements
+- **Fixed Connect Interface** - Resolved method return type compatibility issues
+- **Enhanced Bridge** - Added `Bridge::route()` for Laravel-style routing
+- **YAML Route Support** - Complete YAML route configuration support
+- **ludelix-connect Integration** - Perfect JavaScript library compatibility
+- **Service Access** - Added missing Bridge methods (`request`, `session`, `csrf`, `view`)
+- **Type Safety** - Fixed PHP strict type compatibility throughout framework
 
 ## 🎯 Usage Examples
 

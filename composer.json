@@ -3,6 +3,7 @@
   "description": "Modern PHP Framework with Multi-Tenancy, Advanced ORM, and SPA Integration",
   "type": "library",
   "license": "MIT",
+  "version": "1.0.1",
   "keywords": [
     "framework",
     "php",
@@ -91,7 +92,7 @@
 
   "extra": {
     "branch-alias": {
-      "dev-main": "1.0-dev"
+      "dev-main": "1.1-dev"
     }
   }
 }

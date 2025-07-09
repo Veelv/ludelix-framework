@@ -30,33 +30,33 @@ interface ConnectInterface
      * Set shared properties available to all components
      * 
      * @param array $shared Shared state data
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function share(array $shared): self;
+    public function share(array $shared): ConnectInterface;
 
     /**
      * Enable Server-Side Rendering for the component
      * 
      * @param bool $enabled SSR enabled state
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function ssr(bool $enabled = true): self;
+    public function ssr(bool $enabled = true): ConnectInterface;
 
     /**
      * Set the root template for SPA mounting
      * 
      * @param string $template Template name
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function rootTemplate(string $template): self;
+    public function rootTemplate(string $template): ConnectInterface;
 
     /**
      * Configure WebSocket synchronization
      * 
      * @param array $config WebSocket configuration
-     * @return self Fluent interface
+     * @return ConnectInterface Fluent interface
      */
-    public function websocket(array $config = []): self;
+    public function websocket(array $config = []): ConnectInterface;
 
     /**
      * Check if current request is from LudelixConnect

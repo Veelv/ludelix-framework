@@ -485,6 +485,56 @@ class Bridge implements BridgeInterface
         return self::instance()->get('ludou');
     }
     
+    /**
+     * Connect SPA integration system
+     * Provides advanced SPA capabilities with SSR and WebSocket support
+     */
+    public static function connect(): mixed
+    {
+        return self::instance()->get('connect');
+    }
+    
+    /**
+     * Request object with context awareness
+     */
+    public static function request(): mixed
+    {
+        return self::instance()->get('request');
+    }
+    
+    /**
+     * Session management with tenant isolation
+     */
+    public static function session(): mixed
+    {
+        return self::instance()->get('session');
+    }
+    
+    /**
+     * CSRF protection service
+     */
+    public static function csrf(): mixed
+    {
+        return self::instance()->get('csrf');
+    }
+    
+    /**
+     * View/Template rendering service
+     */
+    public static function view(): mixed
+    {
+        return self::instance()->get('view');
+    }
+    
+    /**
+     * Router service for route registration and management
+     * Provides Laravel-style route registration via Bridge facade
+     */
+    public static function route(): mixed
+    {
+        return self::instance()->get('router');
+    }
+    
     // Protected helper methods for internal Bridge operations
     
     protected function initializeMiddleware(array $middlewareConfig): void

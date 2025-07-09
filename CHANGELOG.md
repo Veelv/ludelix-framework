@@ -5,6 +5,36 @@ All notable changes to Ludelix Framework will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2024-01-XX
+
+### 🔧 Bug Fixes and Improvements
+
+#### Fixed
+- **Connect Interface Compatibility** - Fixed method return types in ConnectInterface
+- **Bridge Service Resolution** - Added missing static methods for service access
+- **Method Signature Conflicts** - Resolved duplicate method declarations in Connect class
+- **Type Compatibility** - Fixed interface implementation inconsistencies
+
+#### Added
+- **Bridge::route()** - Laravel-style route registration via Bridge facade
+- **Enhanced Service Access** - Added `request()`, `session()`, `csrf()`, `view()` methods to Bridge
+- **YAML Route Support** - Complete YAML route configuration support
+- **ludelix-connect Integration** - Perfect compatibility with JavaScript library
+
+#### Improved
+- **Connect Static Methods** - Better compatibility with ludelix-connect JavaScript library
+- **Interface Consistency** - All fluent methods now return proper interface types
+- **Service Resolution** - Enhanced Bridge service resolution with better error handling
+- **Code Quality** - Fixed PHP strict type compatibility issues
+
+#### Technical Details
+- Fixed `ConnectInterface::share()` return type from `self` to `ConnectInterface`
+- Added missing `Bridge::connect()` method for Connect service access
+- Resolved method redeclaration conflicts in Connect class
+- Enhanced static method compatibility for JavaScript integration
+
+---
+
 ## [1.0.0] - 2024-01-XX
 
 ### 🎉 Initial Release - Modern PHP Framework
