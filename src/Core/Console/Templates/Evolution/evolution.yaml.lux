@@ -1,0 +1,76 @@
+evolution:
+  id: {{evolutionId}}
+  description: "{{description}}"
+  author: "{{author}}"
+  created_at: "{{timestamp}}"
+
+forward:
+  {{#if createTable}}
+  create_table:
+    name: {{tableName}}
+    columns:
+      {{#each columns}}
+      {{name}}:
+        type: {{type}}
+        {{#if nullable}}nullable: true{{/if}}
+        {{#if unique}}unique: true{{/if}}
+        {{#if primary}}primary: true{{/if}}
+        {{#if auto_increment}}auto_increment: true{{/if}}
+        {{#if default}}default: {{default}}{{/if}}
+      {{/each}}
+    
+    {{#if indexes}}
+    indexes:
+      {{#each indexes}}
+      - name: {{name}}
+        columns: [{{#each columns}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}]
+        {{#if unique}}unique: true{{/if}}
+      {{/each}}
+    {{/if}}
+    
+    {{#if constraints}}
+    constraints:
+      {{#each constraints}}
+      - name: {{name}}
+        {{#if check}}check: "{{check}}"{{/if}}
+      {{/each}}
+    {{/if}}
+  {{/if}}
+  
+  {{#if modifyTable}}
+  modify_table:
+    name: {{tableName}}
+    add_columns:
+      {{#each newColumns}}
+      {{name}}:
+        type: {{type}}
+        {{#if nullable}}nullable: true{{/if}}
+      {{/each}}
+    
+    {{#if dropColumns}}
+    drop_columns:
+      {{#each dropColumns}}
+      - {{this}}
+      {{/each}}
+    {{/if}}
+  {{/if}}
+
+backward:
+  {{#if createTable}}
+  drop_table: {{tableName}}
+  {{/if}}
+  
+  {{#if modifyTable}}
+  modify_table:
+    name: {{tableName}}
+    {{#if newColumns}}
+    drop_columns:
+      {{#each newColumns}}
+      - {{name}}
+      {{/each}}
+    {{/if}}
+  {{/if}}
+
+dependencies:
+  requires: []
+  conflicts: []

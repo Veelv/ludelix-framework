@@ -1,0 +1,32 @@
+<?php
+
+use Ludelix\Database\Seeders\Core\Seeder;
+use Ludelix\Database\Seeders\Core\SeederManager;
+
+return new class extends Seeder
+{
+    public string $description = '{{description}}';
+    
+    public function seed(SeederManager $manager): void
+    {
+        {{#if useFactory}}
+        // Generate fake data using factory
+        $this->factory('{{tableName}}', 10);
+        {{else}}
+        // Insert specific data
+        $this->table('{{tableName}}')
+            {{#each sampleData}}
+            ->create([
+                {{#each this}}
+                '{{@key}}' => '{{this}}',
+                {{/each}}
+            ])
+            {{/each}}
+            ->execute();
+        {{/if}}
+        
+        // You can also:
+        // $this->truncate('{{tableName}}'); // Clear table first
+        // $this->call(AnotherSeeder::class); // Call another seeder
+    }
+};

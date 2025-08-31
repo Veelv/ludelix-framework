@@ -1,0 +1,73 @@
+<?php
+
+namespace {{namespace}};
+
+use Ludelix\Core\RestController;
+use Ludelix\PRT\Request;
+use Ludelix\PRT\Response;
+
+class {{className}} extends RestController
+{
+    /**
+     * List resources (GET /resource)
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @return mixed
+     */
+    public function index(Request $request, $response)
+    {
+        // return $this->success([...]);
+    }
+
+    /**
+     * Show a specific resource (GET /resource/{id})
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @param mixed $id
+     * @return mixed
+     */
+    public function show(Request $request, $response, $id)
+    {
+        // return $this->success([...]);
+    }
+
+    /**
+     * Create a new resource (POST /resource)
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @return mixed
+     */
+    public function store(Request $request, $response)
+    {
+        // return $this->success([...]);
+    }
+
+    /**
+     * Update a resource (PUT /resource/{id})
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @param mixed $id
+     * @return mixed
+     */
+    public function update(Request $request, $response, $id)
+    {
+        // return $this->success([...]);
+    }
+
+    /**
+     * Delete a resource (DELETE /resource/{id})
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @param mixed $id
+     * @return mixed
+     */
+    public function destroy(Request $request, $response, $id)
+    {
+        // return $this->success([...]);
+    }
+}

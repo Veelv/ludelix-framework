@@ -1,0 +1,18 @@
+<?php
+
+namespace {{namespace}};
+
+use Ludelix\Core\Controller;
+
+class {{className}} extends Controller
+{
+    /**
+     * Display a listing of the resource
+     *
+     * @return mixed
+     */
+    public function index()
+    {
+        // return $this->view('...', [...]);
+    }
+}

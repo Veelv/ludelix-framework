@@ -1,0 +1,102 @@
+<?php
+
+use Ludelix\Database\Core\Repository;
+use Ludelix\Auth\Entities\AuthEntity;
+use Ludelix\Interface\Auth\UserProviderInterface;
+use Ludelix\Interface\Auth\UserInterface;
+use Ludelix\Auth\Services\AuthAccountService;
+
+class UserRepository extends Repository implements UserProviderInterface
+{
+    protected function getEntityClass(): string
+    {
+        return AuthEntity::class;
+    }
+
+    public function retrieveById(int|string $id): ?UserInterface
+    {
+        return $this->find($id);
+    }
+
+    public function retrieveByCredentials(array $credentials): ?UserInterface
+    {
+        return $this->findOneBy(['email' => $credentials['email'] ?? null]);
+    }
+
+    public function validateCredentials(UserInterface $user, array $credentials): bool
+    {
+        // Delegar para o AuthAccountService
+        return AuthAccountService::validatePassword($user, $credentials['password'] ?? '');
+    }
+
+    public function register(array $data): UserInterface
+    {
+        // Delegar para o AuthAccountService
+        return AuthAccountService::register($data);
+    }
+
+    public function editAccount(UserInterface $user, array $data): UserInterface
+    {
+        return AuthAccountService::editAccount($user, $data);
+    }
+
+    public function changePassword(UserInterface $user, string $newPassword): bool
+    {
+        return AuthAccountService::changePassword($user, $newPassword);
+    }
+
+    public function requestPasswordReset(string $email): void
+    {
+        AuthAccountService::requestPasswordReset($email);
+    }
+
+    public function resetPassword(string $token, string $newPassword): bool
+    {
+        return AuthAccountService::resetPassword($token, $newPassword);
+    }
+
+    public function uploadAvatar(UserInterface $user, $file): string
+    {
+        return AuthAccountService::uploadAvatar($user, $file);
+    }
+
+    public function softDelete(UserInterface $user, int $days): void
+    {
+        AuthAccountService::softDelete($user, $days);
+    }
+
+    public function cancelSoftDelete(UserInterface $user): void
+    {
+        AuthAccountService::cancelSoftDelete($user);
+    }
+
+    public function sendVerification(UserInterface $user): void
+    {
+        AuthAccountService::sendVerification($user);
+    }
+
+    public function verifyAccount(string $token): bool
+    {
+        return AuthAccountService::verifyAccount($token);
+    }
+
+    public function assignRole(UserInterface $user, string $role): void
+    {
+        AuthAccountService::assignRole($user, $role);
+    }
+
+    public function removeRole(UserInterface $user, string $role): void
+    {
+        AuthAccountService::removeRole($user, $role);
+    }
+
+    public function assignPermission(UserInterface $user, string $permission): void
+    {
+        AuthAccountService::assignPermission($user, $permission);
+    }
+
+    public function removePermission(UserInterface $user, string $permission): void
+    {
+        AuthAccountService::removePermission($user, $permission);
+    }
+} 

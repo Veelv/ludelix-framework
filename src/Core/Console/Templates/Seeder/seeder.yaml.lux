@@ -1,0 +1,27 @@
+seeder:
+  name: {{name}}
+  description: "{{description}}"
+  author: "{{author}}"
+  created_at: "{{timestamp}}"
+
+seed:
+  {{tableName}}:
+    {{#if useFactory}}
+    factory:
+      count: 10
+      options:
+        # Custom options for factory
+    {{else}}
+    data:
+      {{#each sampleData}}
+      - {{#each this}}
+        {{@key}}: "{{this}}"
+        {{/each}}
+      {{/each}}
+    {{/if}}
+
+# You can add multiple tables:
+# another_table:
+#   data:
+#     - name: "Sample"
+#       value: "Test"
