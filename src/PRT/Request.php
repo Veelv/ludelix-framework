@@ -20,16 +20,18 @@ class Request
     protected ?string $body = null;
     protected array $attributes = [];
 
-    public function __construct()
+    public function __construct(array $serverData = null)
     {
-        $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $this->uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $server = $serverData ?? $_SERVER;
+        
+        $this->method = $server['REQUEST_METHOD'] ?? 'GET';
+        $this->uri = $server['REQUEST_URI'] ?? '/';
+        $this->server = $server;
         $this->headers = $this->parseHeaders();
         $this->query = $_GET;
         $this->post = $_POST;
         $this->files = $_FILES;
         $this->cookies = $_COOKIE;
-        $this->server = $_SERVER;
         $this->body = file_get_contents('php://input');
     }
 
@@ -72,6 +74,15 @@ class Request
     public function getHeaders(): array
     {
         return $this->headers;
+    }
+
+    /**
+     * Check if header exists
+     */
+    public function hasHeader(string $name): bool
+    {
+        $name = strtolower($name);
+        return isset($this->headers[$name]);
     }
 
     /**
@@ -206,6 +217,14 @@ class Request
     public function getAttribute(string $key, mixed $default = null): mixed
     {
         return $this->attributes[$key] ?? $default;
+    }
+
+    /**
+     * Get all attributes
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 
     /**

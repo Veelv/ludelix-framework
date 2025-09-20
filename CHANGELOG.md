@@ -31,3 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Improved project structure for better maintainability
+
+## [1.0.1] - 2025-08-31
+
+### fix: PHP 8.1 compatibility and translate docs
+
+- Downgrade PHPUnit to 9.6.x for PHP 8.1 support
+- Fix Logger imports and missing methods
+- Resolve test failures
+- Translate COMPATIBILITY.md to English

@@ -7,7 +7,7 @@ use Ludelix\Routing\Resolvers\RouteResolver;
 use Ludelix\Routing\Core\Route;
 use Ludelix\Routing\Core\RouteCollection;
 use Ludelix\Core\Container;
-use Ludelix\Core\Logger;
+use Ludelix\Core\Logging\NullLogger;
 
 class RouteResolverTest extends TestCase
 {
@@ -17,7 +17,7 @@ class RouteResolverTest extends TestCase
     protected function setUp(): void
     {
         $container = new Container();
-        $logger = new Logger();
+        $logger = new NullLogger();
         $this->resolver = new RouteResolver($container, $logger);
         $this->routes = new RouteCollection();
     }

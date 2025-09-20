@@ -10,7 +10,7 @@ use Ludelix\Routing\Cache\RouteCache;
 use Ludelix\Routing\Resolvers\RouteResolver;
 use Ludelix\Routing\Generators\UrlGenerator;
 use Ludelix\Core\EventDispatcher;
-use Ludelix\Core\Logger;
+use Ludelix\Core\Logging\NullLogger;
 use Ludelix\Core\Container;
 use Ludelix\Tenant\Core\TenantManager;
 use Ludelix\PRT\Request;
@@ -23,7 +23,7 @@ class RouterTest extends TestCase
     protected function setUp(): void
     {
         $this->routes = new RouteCollection();
-        $logger = new Logger();
+        $logger = new NullLogger();
         $container = new Container();
         $eventDispatcher = new EventDispatcher();
         

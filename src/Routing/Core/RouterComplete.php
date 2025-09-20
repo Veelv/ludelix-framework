@@ -11,7 +11,7 @@ use Ludelix\Routing\Core\RouteCollection;
 use Ludelix\Routing\Parsers\YamlRouteParser;
 use Ludelix\Routing\Parsers\PhpRouteParser;
 use Ludelix\Routing\Parsers\JsonRouteParser;
-use Ludelix\Routing\Parsers\DatabaseRouteParser;
+// use Ludelix\Routing\Parsers\DatabaseRouteParser;
 use Ludelix\Routing\Compilers\RouteCompiler;
 use Ludelix\Routing\Cache\RouteCache;
 use Ludelix\Routing\Resolvers\RouteResolver;
@@ -26,7 +26,7 @@ use Ludelix\PRT\Response;
 use Ludelix\Core\EventDispatcher;
 use Ludelix\Cache\CacheManager;
 use Ludelix\Tenant\Core\TenantManager;
-use Ludelix\Core\Logger;
+use Ludelix\Interface\Logging\LoggerInterface;
 
 /**
  * Router Complete - Sistema de Roteamento Completo
@@ -39,13 +39,13 @@ class RouterComplete implements RouterInterface
     protected RouteResolver $resolver;
     protected UrlGenerator $urlGenerator;
     protected EventDispatcher $eventDispatcher;
-    protected Logger $logger;
+    protected LoggerInterface $logger;
     protected TenantManager $tenantManager;
     
     protected YamlRouteParser $yamlParser;
     protected PhpRouteParser $phpParser;
     protected JsonRouteParser $jsonParser;
-    protected DatabaseRouteParser $databaseParser;
+    // protected DatabaseRouteParser $databaseParser;
     
     protected array $groupStack = [];
     protected array $currentAttributes = [];
@@ -78,7 +78,7 @@ class RouterComplete implements RouterInterface
         RouteResolver $resolver,
         UrlGenerator $urlGenerator,
         EventDispatcher $eventDispatcher,
-        Logger $logger,
+        LoggerInterface $logger,
         TenantManager $tenantManager,
         array $config = []
     ) {
@@ -404,7 +404,7 @@ class RouterComplete implements RouterInterface
         $this->yamlParser = new YamlRouteParser($this->config['parsers']['yaml'] ?? []);
         $this->phpParser = new PhpRouteParser($this->config['parsers']['php'] ?? []);
         $this->jsonParser = new JsonRouteParser($this->config['parsers']['json'] ?? []);
-        $this->databaseParser = new DatabaseRouteParser($this->config['parsers']['database'] ?? []);
+        // $this->databaseParser = new DatabaseRouteParser($this->config['parsers']['database'] ?? []);
     }
 
     protected function initializeConfiguration(): void

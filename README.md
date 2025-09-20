@@ -33,6 +33,23 @@ Ludelix is accessible, yet powerful, providing tools needed for large, robust ap
 - ext-mbstring
 - ext-openssl
 
+## Compatibility
+
+The Ludelix Framework is compatible with:
+
+- **PHP 8.1+** (minimum recommended version)
+- **PHP 8.2** (fully compatible)
+- **PHP 8.3** (fully compatible)
+
+### Testing Framework
+
+For testing, we recommend:
+
+- **PHP 8.1**: PHPUnit 9.6.x
+- **PHP 8.2+**: PHPUnit 10.x
+
+See [COMPATIBILITY.md](COMPATIBILITY.md) for detailed compatibility information and setup instructions.
+
 ## Installation
 
 To get started, create a new Ludelix project via Composer:

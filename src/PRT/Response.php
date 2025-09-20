@@ -83,6 +83,14 @@ class Response
     }
 
     /**
+     * Check if header exists
+     */
+    public function hasHeader(string $name): bool
+    {
+        return isset($this->headers[$name]);
+    }
+
+    /**
      * Set cookie
      */
     public function setCookie(string $name, string $value, array $options = []): self
@@ -101,6 +109,14 @@ class Response
     }
 
     /**
+     * Get all cookies
+     */
+    public function getCookies(): array
+    {
+        return $this->cookies;
+    }
+
+    /**
      * Create JSON response
      */
     public static function json(array $data, int $statusCode = 200): self
@@ -111,6 +127,16 @@ class Response
     }
 
     /**
+     * Set JSON content
+     */
+    public function setJson(array $data): self
+    {
+        $this->content = json_encode($data);
+        $this->setHeader('Content-Type', 'application/json; charset=UTF-8');
+        return $this;
+    }
+
+    /**
      * Create redirect response
      */
     public static function redirect(string $url, int $statusCode = 302): self
@@ -118,6 +144,16 @@ class Response
         return new self('', $statusCode, [
             'Location' => $url
         ]);
+    }
+
+    /**
+     * Set redirect
+     */
+    public function setRedirect(string $url, int $statusCode = 302): self
+    {
+        $this->statusCode = $statusCode;
+        $this->setHeader('Location', $url);
+        return $this;
     }
 
     /**
@@ -275,6 +311,14 @@ class Response
     public function isRedirect(): bool
     {
         return $this->statusCode >= 300 && $this->statusCode < 400;
+    }
+
+    /**
+     * Check if response is redirection (alias for isRedirect)
+     */
+    public function isRedirection(): bool
+    {
+        return $this->isRedirect();
     }
 
     /**

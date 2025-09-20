@@ -7,7 +7,7 @@ use Ludelix\Routing\Binding\ModelBinder;
 use Ludelix\PRT\Request;
 use Ludelix\PRT\Response;
 use Ludelix\Core\Container;
-use Ludelix\Core\Logger;
+use Ludelix\Interface\Logging\LoggerInterface;
 
 /**
  * Route Dispatcher - Advanced Route Execution System
@@ -23,13 +23,13 @@ class RouteDispatcher
 {
     protected Container $container;
     protected ModelBinder $modelBinder;
-    protected Logger $logger;
+    protected LoggerInterface $logger;
     protected array $config;
 
     public function __construct(
         Container $container,
         ModelBinder $modelBinder,
-        Logger $logger,
+        LoggerInterface $logger,
         array $config = []
     ) {
         $this->container = $container;

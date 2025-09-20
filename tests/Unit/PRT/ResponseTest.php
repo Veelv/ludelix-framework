@@ -20,7 +20,7 @@ class ResponseTest extends TestCase
     {
         $data = ['name' => 'John', 'age' => 30];
         $response = new Response();
-        $response->json($data);
+        $response->setJson($data);
 
         $this->assertEquals(json_encode($data), $response->getContent());
         $this->assertEquals('application/json; charset=UTF-8', $response->getHeader('Content-Type'));
@@ -48,7 +48,7 @@ class ResponseTest extends TestCase
     public function testRedirect(): void
     {
         $response = new Response();
-        $response->redirect('/login', 302);
+        $response->setRedirect('/login', 302);
 
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/login', $response->getHeader('Location'));
