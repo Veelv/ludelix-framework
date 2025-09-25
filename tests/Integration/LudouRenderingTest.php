@@ -62,6 +62,75 @@ class LudouRenderingTest extends TestCase
         $this->assertStringContainsString('Item: C', $result);
     }
 
+    public function testForeachWithKeyValue(): void
+    {
+        $template = '#foreach($users as $key => $user) Key: #[$key], User: #[$user] #endforeach';
+        $this->createTemplate('keyvalue', $template);
+        
+        $result = $this->engine->render('keyvalue', ['users' => ['admin' => 'John', 'user' => 'Jane']]);
+        $this->assertStringContainsString('Key: admin, User: John', $result);
+        $this->assertStringContainsString('Key: user, User: Jane', $result);
+    }
+
+    public function testForeachWithSimpleArray(): void
+    {
+        $template = '#foreach($items) Item: #[$item] #endforeach';
+        $this->createTemplate('simple', $template);
+        
+        $result = $this->engine->render('simple', ['items' => ['A', 'B', 'C']]);
+        $this->assertStringContainsString('Item: A', $result);
+        $this->assertStringContainsString('Item: B', $result);
+        $this->assertStringContainsString('Item: C', $result);
+    }
+
+    public function testForeachWithEmptyArray(): void
+    {
+        $template = '#foreach($items as $item) Item: #[$item] #endforeach';
+        $this->createTemplate('empty', $template);
+        
+        $result = $this->engine->render('empty', ['items' => []]);
+        $this->assertStringNotContainsString('Item:', $result);
+    }
+
+    public function testForeachWithNullArray(): void
+    {
+        $template = '#foreach($items as $item) Item: #[$item] #endforeach';
+        $this->createTemplate('null', $template);
+        
+        $result = $this->engine->render('null', []);
+        $this->assertStringNotContainsString('Item:', $result);
+    }
+
+    public function testForeachWithInvalidSyntax(): void
+    {
+        $template = '#foreach(items as item) Item: #[$item] #endforeach';
+        $this->createTemplate('invalid', $template);
+        
+        $result = $this->engine->render('invalid', ['items' => ['A', 'B']]);
+        $this->assertStringContainsString('Erro foreach', $result);
+        $this->assertStringContainsString('Variável de array inválida', $result);
+    }
+
+    public function testForeachWithInvalidItemVariable(): void
+    {
+        $template = '#foreach($items as item) Item: #[$item] #endforeach';
+        $this->createTemplate('invalid_item', $template);
+        
+        $result = $this->engine->render('invalid_item', ['items' => ['A', 'B']]);
+        $this->assertStringContainsString('Erro foreach', $result);
+        $this->assertStringContainsString('Variável de item inválida', $result);
+    }
+
+    public function testForeachWithInvalidKeyValueSyntax(): void
+    {
+        $template = '#foreach($items as key => value) Key: #[$key], Value: #[$value] #endforeach';
+        $this->createTemplate('invalid_keyvalue', $template);
+        
+        $result = $this->engine->render('invalid_keyvalue', ['items' => ['A' => 'B']]);
+        $this->assertStringContainsString('Erro foreach', $result);
+        $this->assertStringContainsString('Variável de chave inválida', $result);
+    }
+
     public function testTemplateWithSections(): void
     {
         $template = 'Simple content';

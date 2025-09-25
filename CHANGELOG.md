@@ -40,3 +40,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix Logger imports and missing methods
 - Resolve test failures
 - Translate COMPATIBILITY.md to English
+
+## [1.1.0] - 2025-01-21
+
+### Added
+- **Mobile-First Responsive Design**: Implemented mobile-first approach for responsive layouts, enhancing mobile device experience
+- **Enhanced Flexbox System**: Improved Flexbox capabilities with better responsive controls and utility classes
+- **Advanced CSS Grid System**: Complete CSS Grid system for creating complex and responsive layouts with ease
+- **Enhanced JIT Mode**: Improved Just-In-Time compilation mode specifically designed for Fluid framework syntax with `fl-` prefix
+- **Optimized Scanner**: Enhanced scanner to detect Fluid-specific syntax patterns
+- **Dark Mode Plugin**: Adapted dark mode plugin to work with Fluid-specific color tokens
+- **Custom Token Configuration**: Support for custom tokens and personalized configurations
+- **Arbitrary Value Support**: Extended support for arbitrary values maintaining Fluid-specific syntax for layout properties
+
+### Enhanced
+- **Ludou Template Engine**: Significant improvements in `foreach` directive communication and interaction
+- **Fluid-Ludou Integration**: Better integration between Fluid framework and Ludou template engine
+- **Responsive System**: Enhanced responsive design capabilities with mobile-first approach
+- **Template Compilation**: Improved template compilation process with better error handling and validation
+
+### Improved
+- **Developer Experience**: Better syntax highlighting and validation for Fluid framework
+- **Performance**: Optimized compilation and rendering processes
+- **Cross-Device Compatibility**: Enhanced support for various screen sizes and devices

@@ -39,6 +39,16 @@ class TemplateParser implements TemplateParserInterface
             }
         }
         
+        // Extract foreach expressions for validation
+        preg_match_all('/#foreach\s*\(([^)]+)\)/', $template, $foreachMatches, PREG_SET_ORDER);
+        foreach ($foreachMatches as $match) {
+            $directives[] = [
+                'type' => 'foreach_expression', 
+                'full' => $match[0], 
+                'expression' => trim($match[1])
+            ];
+        }
+        
         return $directives;
     }
 
@@ -57,7 +67,50 @@ class TemplateParser implements TemplateParserInterface
             }
         }
         
+        // Validate foreach expressions
+        preg_match_all('/#foreach\s*\(([^)]+)\)/', $template, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $expression = trim($match[1]);
+            $this->validateForeachExpression($expression);
+        }
+        
         return true;
+    }
+    
+    protected function validateForeachExpression(string $expression): void
+    {
+        // Handle "array as item" syntax: #foreach($users as $user)
+        if (strpos($expression, ' as ') !== false) {
+            $parts = explode(' as ', $expression, 2);
+            $arrayVar = trim($parts[0]);
+            $itemVar = trim($parts[1]);
+            
+            // Check for key-value syntax: $array as $key => $value
+            if (strpos($itemVar, ' => ') !== false) {
+                $keyValueParts = explode(' => ', $itemVar, 2);
+                $keyVar = trim($keyValueParts[0]);
+                $valueVar = trim($keyValueParts[1]);
+                
+                if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]+\])*$/', $arrayVar) ||
+                    !preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $keyVar) ||
+                    !preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $valueVar)) {
+                    throw new \Exception("Invalid foreach key-value syntax: $expression. Use: #foreach(\$array as \$key => \$value)");
+                }
+            } else {
+                // Simple array as item syntax
+                if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]+\])*$/', $arrayVar) ||
+                    !preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $itemVar)) {
+                    throw new \Exception("Invalid foreach syntax: $expression. Use: #foreach(\$array as \$item)");
+                }
+            }
+        }
+        // Handle simple array: #foreach($items)
+        else if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]+\])*$/', $expression)) {
+            // Valid simple foreach
+        }
+        else {
+            throw new \Exception("Invalid foreach expression: $expression. Supported formats: #foreach(\$array), #foreach(\$array as \$item), #foreach(\$array as \$key => \$value)");
+        }
     }
 
     protected function extractSections(string $template): array

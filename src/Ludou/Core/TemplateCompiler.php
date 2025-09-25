@@ -173,49 +173,147 @@ class TemplateCompiler implements TemplateCompilerInterface
         // Process directives with proper capture groups
         $template = preg_replace_callback('/#if\s*\(([^)]+)\)/', function ($matches) {
             $condition = $matches[1];
-            // Add $ to variables that don't already have it
-            $condition = preg_replace('/\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
+            // Only add $ to variables that don't already have it and are not keywords
+            $condition = preg_replace('/\b(?<!\$)([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
             return "<?php if ($condition): ?>";
         }, $template);
         
         // Suporte para #if[condição] com colchetes
         $template = preg_replace_callback('/#if\s*\[([^\]]+)\]/', function ($matches) {
             $condition = $matches[1];
-            // Add $ to variables that don't already have it
-            $condition = preg_replace('/\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
+            // Only add $ to variables that don't already have it and are not keywords
+            $condition = preg_replace('/\b(?<!\$)([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
             return "<?php if ($condition): ?>";
         }, $template);
         
         $template = preg_replace_callback('/#elseif\s*\(([^)]+)\)/', function ($matches) {
             $condition = $matches[1];
-            // Add $ to variables that don't already have it
-            $condition = preg_replace('/\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
+            // Only add $ to variables that don't already have it and are not keywords
+            $condition = preg_replace('/\b(?<!\$)([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
             return "<?php elseif ($condition): ?>";
         }, $template);
         
         // Suporte para #elseif[condição] com colchetes
         $template = preg_replace_callback('/#elseif\s*\[([^\]]+)\]/', function ($matches) {
             $condition = $matches[1];
-            // Add $ to variables that don't already have it
-            $condition = preg_replace('/\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
+            // Only add $ to variables that don't already have it and are not keywords
+            $condition = preg_replace('/\b(?<!\$)([a-zA-Z_][a-zA-Z0-9_]*)\b(?!\s*[\(\'"])/', '$$1', $condition);
             return "<?php elseif ($condition): ?>";
         }, $template);
         
         $template = preg_replace('/#else/', '<?php else: ?>', $template);
         $template = preg_replace('/#endif/', '<?php endif; ?>', $template);
 
-        // Process foreach with proper syntax
-        $template = preg_replace_callback('/#foreach\s*\(([^)]+)\)/', function ($matches) {
-            $expression = $matches[1];
-            // Handle "array as item" syntax
+        // Track foreach blocks for proper endforeach handling
+        $foreachBlocks = [];
+        $foreachCount = 0;
+        
+        // Process foreach with enhanced syntax and validation
+        $template = preg_replace_callback('/#foreach\s*\(([^)]+)\)/', function ($matches) use (&$foreachBlocks, &$foreachCount) {
+            $expression = trim($matches[1]);
+            $foreachCount++;
+            $blockId = 'FOREACH_BLOCK_' . $foreachCount;
+            
+            // Handle "array as item" syntax: #foreach($users as $user)
             if (strpos($expression, ' as ') !== false) {
-                return "<?php foreach ($expression): ?>";
+                $parts = explode(' as ', $expression, 2);
+                $arrayVar = trim($parts[0]);
+                $itemVar = trim($parts[1]);
+                
+                // Check for key-value syntax: $array as $key => $value
+                if (strpos($itemVar, ' => ') !== false) {
+                    $keyValueParts = explode(' => ', $itemVar, 2);
+                    $keyVar = trim($keyValueParts[0]);
+                    $valueVar = trim($keyValueParts[1]);
+                    
+                    // Validate array variable has $ prefix
+                    if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]+\])*$/', $arrayVar)) {
+                        $foreachBlocks[$blockId] = false; // Mark as error
+                        return "<?php echo '<div style=\"color:red;background:#ffe6e6;padding:8px;border:1px solid red;border-radius:4px;font-family:monospace\"><strong>Erro foreach:</strong> Variável de array inválida: " . htmlspecialchars($arrayVar) . ". Use formato: #foreach(\$array as \$key => \$value)</div>'; ?>";
+                    }
+                    
+                    // Validate key variable has $ prefix
+                    if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $keyVar)) {
+                        $foreachBlocks[$blockId] = false; // Mark as error
+                        return "<?php echo '<div style=\"color:red;background:#ffe6e6;padding:8px;border:1px solid red;border-radius:4px;font-family:monospace\"><strong>Erro foreach:</strong> Variável de chave inválida: " . htmlspecialchars($keyVar) . ". Use formato: #foreach(\$array as \$key => \$value)</div>'; ?>";
+                    }
+                    
+                    // Validate value variable has $ prefix
+                    if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $valueVar)) {
+                        $foreachBlocks[$blockId] = false; // Mark as error
+                        return "<?php echo '<div style=\"color:red;background:#ffe6e6;padding:8px;border:1px solid red;border-radius:4px;font-family:monospace\"><strong>Erro foreach:</strong> Variável de valor inválida: " . htmlspecialchars($valueVar) . ". Use formato: #foreach(\$array as \$key => \$value)</div>'; ?>";
+                    }
+                    
+                    $foreachBlocks[$blockId] = true; // Mark as valid
+                    return "<?php if (isset({$arrayVar}) && (is_array({$arrayVar}) || is_iterable({$arrayVar}))): foreach ({$expression}): ?>";
+                }
+                
+                // Simple array as item syntax
+                // Validate array variable has $ prefix
+                if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]+\])*$/', $arrayVar)) {
+                    $foreachBlocks[$blockId] = false; // Mark as error
+                    return "<?php echo '<div style=\"color:red;background:#ffe6e6;padding:8px;border:1px solid red;border-radius:4px;font-family:monospace\"><strong>Erro foreach:</strong> Variável de array inválida: " . htmlspecialchars($arrayVar) . ". Use formato: #foreach(\$array as \$item)</div>'; ?>";
+                }
+                
+                // Validate item variable has $ prefix
+                if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $itemVar)) {
+                    $foreachBlocks[$blockId] = false; // Mark as error
+                    return "<?php echo '<div style=\"color:red;background:#ffe6e6;padding:8px;border:1px solid red;border-radius:4px;font-family:monospace\"><strong>Erro foreach:</strong> Variável de item inválida: " . htmlspecialchars($itemVar) . ". Use formato: #foreach(\$array as \$item)</div>'; ?>";
+                }
+                
+                $foreachBlocks[$blockId] = true; // Mark as valid
+                return "<?php if (isset({$arrayVar}) && (is_array({$arrayVar}) || is_iterable({$arrayVar}))): foreach ({$expression}): ?>";
             }
-            // Handle simple array
-            return "<?php foreach ($expression as \$item): ?>";
+            
+            // Handle simple array: #foreach($items)
+            if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]+\])*$/', $expression)) {
+                $foreachBlocks[$blockId] = true; // Mark as valid
+                return "<?php if (isset({$expression}) && (is_array({$expression}) || is_iterable({$expression}))): foreach ({$expression} as \$item): ?>";
+            }
+            
+            // Handle array with key-value: #foreach($items as $key => $value)
+            if (strpos($expression, ' => ') !== false) {
+                $parts = explode(' => ', $expression, 2);
+                $arrayPart = trim($parts[0]);
+                $valueVar = trim($parts[1]);
+                
+                if (strpos($arrayPart, ' as ') !== false) {
+                    $arrayParts = explode(' as ', $arrayPart, 2);
+                    $arrayVar = trim($arrayParts[0]);
+                    $keyVar = trim($arrayParts[1]);
+                    
+                    // Validate variables
+                    if (!preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*(\[[^\]]+\])*$/', $arrayVar) ||
+                        !preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $keyVar) ||
+                        !preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $valueVar)) {
+                        $foreachBlocks[$blockId] = false; // Mark as error
+                        return "<?php echo '<div style=\"color:red;background:#ffe6e6;padding:8px;border:1px solid red;border-radius:4px;font-family:monospace\"><strong>Erro foreach:</strong> Sintaxe inválida para key-value. Use: #foreach(\$array as \$key => \$value)</div>'; ?>";
+                    }
+                    
+                    $foreachBlocks[$blockId] = true; // Mark as valid
+                    return "<?php if (isset({$arrayVar}) && (is_array({$arrayVar}) || is_iterable({$arrayVar}))): foreach ({$expression}): ?>";
+                }
+            }
+            
+            // Invalid syntax
+            $foreachBlocks[$blockId] = false; // Mark as error
+            return "<?php echo '<div style=\"color:red;background:#ffe6e6;padding:8px;border:1px solid red;border-radius:4px;font-family:monospace\"><strong>Erro foreach:</strong> Sintaxe inválida: " . htmlspecialchars($expression) . ". Use: #foreach(\$array as \$item) ou #foreach(\$array as \$key => \$value)</div>'; ?>";
         }, $template);
 
-        $template = preg_replace('/#endforeach/', '<?php endforeach; ?>', $template);
+        // Process endforeach - only process if there's a corresponding valid foreach
+        $endforeachCount = 0;
+        $template = preg_replace_callback('/#endforeach/', function ($matches) use (&$foreachBlocks, &$endforeachCount) {
+            $endforeachCount++;
+            $blockId = 'FOREACH_BLOCK_' . $endforeachCount;
+            
+            // Only add endforeach/endif if the corresponding foreach was valid
+            if (isset($foreachBlocks[$blockId]) && $foreachBlocks[$blockId]) {
+                return '<?php endforeach; endif; ?>';
+            }
+            
+            // If there was an error, just return empty string
+            return '';
+        }, $template);
 
         // Process #include['template', {contexto}]
         $template = preg_replace_callback(
@@ -725,8 +823,7 @@ class TemplateCompiler implements TemplateCompilerInterface
             '/#elseif\s*\(([^)]+)\)/' => '<?php elseif ($1): ?>',
             '/#else/' => '<?php else: ?>',
             '/#endif/' => '<?php endif; ?>',
-            '/#foreach\s*\(([^)]+)\)/' => '<?php foreach ($1): ?>',
-            '/#endforeach/' => '<?php endforeach; ?>',
+            // Foreach directives are now handled in the compile method with enhanced validation
             '/#\[connect\]/' => '<?php if (Bridge::isConnectRequest()): ?>
                 <div id="app" data-page="<?php echo json_encode($__connectData ?? []); ?>"></div>
             <?php else: ?>

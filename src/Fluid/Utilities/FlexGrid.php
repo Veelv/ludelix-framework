@@ -1,124 +1,432 @@
 <?php
+
 namespace Ludelix\Fluid\Utilities;
 
-use Ludelix\Fluid\Core\Config;
 use Ludelix\Interface\Fluid\UtilityInterface;
 
+/**
+ * Sistema de Flexbox e Grid Aprimorado para o Fuid
+ * 
+ * Fornece utilities abrangentes para trabalhar com CSS Flexbox e Grid,
+ * incluindo suporte completo a responsividade e valores arbitrários.
+ */
 class FlexGrid implements UtilityInterface
 {
-    public const FLEX = [
-        1 => 1,
-        'auto' => '1 1 auto',
-        'initial' => '0 1 auto',
-        'none' => 'none',
-        'wrap' => [
-            'noWrap' => 'nowrap',
-            'wrap' => 'wrap',
-            'wrapReverse' => 'wrap-reverse',
-        ],
-        'direction' => [
-            'row' => 'row',
-            'rowReverse' => 'row-reverse',
-            'column' => 'column',
-            'columnReverse' => 'column-reverse',
-        ],
-        'grow' => [
-            0 => 0,
-            1 => 1,
-            2 => 2,
-            3 => 3,
-            4 => 4,
-        ],
-        'shrink' => [
-            0 => 0,
-            1 => 1,
-            2 => 2,
-            3 => 3,
-            4 => 4,
-        ],
-        'basis' => [
-            0 => '0%',
-            1 => '8.333333%',
-            2 => '16.666667%',
-            3 => '25%',
-            4 => '33.333333%',
-            5 => '41.666667%',
-            6 => '50%',
-            7 => '58.333333%',
-            8 => '66.666667%',
-            9 => '75%',
-            10 => '83.333333%',
-            11 => '91.666667%',
-            12 => '100%',
-            'auto' => 'auto',
-            'full' => '100%',
-            'px' => '1px',
-            '0.5' => '2px',
-            '1.5' => '6px',
-            '2.5' => '10px',
-            '3.5' => '14px',
-        ],
-    ];
-
-    public const GRID = [
-        'columns' => [
-            1 => 1,
-            2 => 2,
-            3 => 3,
-            4 => 4,
-            6 => 6,
-            8 => 8,
-            12 => 12,
-        ],
-        'gap' => [],
-        'container' => [
-            'sm' => 480,
-            'md' => 768,
-            'lg' => 1024,
-            'xl' => 1280,
-            'max' => '100%',
-        ],
-        'templateAreas' => [
-            'none' => 'none',
-        ],
-        'autoFlow' => [
-            'row' => 'row',
-            'column' => 'column',
-            'dense' => 'dense',
-        ],
-        'row' => [
-            'auto' => 'auto',
-            'span1' => 'span 1',
-            'span2' => 'span 2',
-            'span3' => 'span 3',
-        ],
-        'column' => [
-            'auto' => 'auto',
-            'span1' => 'span 1',
-            'span2' => 'span 2',
-            'span3' => 'span 3',
-        ],
-    ];
-
     public static function getStyles(): array
     {
-        $styles = [];
-        foreach (self::FLEX as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $subKey => $subValue) {
-                    $styles["fl-flex-$key-$subKey"] = ["flex-$key" => $subValue];
-                }
-            } else {
-                $styles["fl-flex-$key"] = ['flex' => $value];
-            }
-        }
-        foreach (self::GRID as $key => $value) {
-            if (is_array($value) && $key !== 'templateAreas') {
-                foreach ($value as $subKey => $subValue) {
-                    $styles["fl-grid-$key-$subKey"] = ["grid-$key" => $subValue];
-                }
-            }
-        }
-        return $styles;
+        return [
+            // Flexbox Display
+            'fl-flex' => ['display' => 'flex'],
+            'fl-inline-flex' => ['display' => 'inline-flex'],
+            
+            // Flex Direction
+            'fl-flex-row' => ['flex-direction' => 'row'],
+            'fl-flex-row-reverse' => ['flex-direction' => 'row-reverse'],
+            'fl-flex-col' => ['flex-direction' => 'column'],
+            'fl-flex-col-reverse' => ['flex-direction' => 'column-reverse'],
+            
+            // Flex Wrap
+            'fl-flex-wrap' => ['flex-wrap' => 'wrap'],
+            'fl-flex-wrap-reverse' => ['flex-wrap' => 'wrap-reverse'],
+            'fl-flex-nowrap' => ['flex-wrap' => 'nowrap'],
+            
+            // Flex (shorthand)
+            'fl-flex-1' => ['flex' => '1 1 0%'],
+            'fl-flex-auto' => ['flex' => '1 1 auto'],
+            'fl-flex-initial' => ['flex' => '0 1 auto'],
+            'fl-flex-none' => ['flex' => 'none'],
+            
+            // Flex Grow
+            'fl-grow' => ['flex-grow' => '1'],
+            'fl-grow-0' => ['flex-grow' => '0'],
+            
+            // Flex Shrink
+            'fl-shrink' => ['flex-shrink' => '1'],
+            'fl-shrink-0' => ['flex-shrink' => '0'],
+            
+            // Flex Basis
+            'fl-basis-0' => ['flex-basis' => '0px'],
+            'fl-basis-1' => ['flex-basis' => '0.25rem'],
+            'fl-basis-2' => ['flex-basis' => '0.5rem'],
+            'fl-basis-3' => ['flex-basis' => '0.75rem'],
+            'fl-basis-4' => ['flex-basis' => '1rem'],
+            'fl-basis-5' => ['flex-basis' => '1.25rem'],
+            'fl-basis-6' => ['flex-basis' => '1.5rem'],
+            'fl-basis-8' => ['flex-basis' => '2rem'],
+            'fl-basis-10' => ['flex-basis' => '2.5rem'],
+            'fl-basis-12' => ['flex-basis' => '3rem'],
+            'fl-basis-16' => ['flex-basis' => '4rem'],
+            'fl-basis-20' => ['flex-basis' => '5rem'],
+            'fl-basis-24' => ['flex-basis' => '6rem'],
+            'fl-basis-32' => ['flex-basis' => '8rem'],
+            'fl-basis-40' => ['flex-basis' => '10rem'],
+            'fl-basis-48' => ['flex-basis' => '12rem'],
+            'fl-basis-56' => ['flex-basis' => '14rem'],
+            'fl-basis-64' => ['flex-basis' => '16rem'],
+            'fl-basis-auto' => ['flex-basis' => 'auto'],
+            'fl-basis-px' => ['flex-basis' => '1px'],
+            'fl-basis-0.5' => ['flex-basis' => '0.125rem'],
+            'fl-basis-1.5' => ['flex-basis' => '0.375rem'],
+            'fl-basis-2.5' => ['flex-basis' => '0.625rem'],
+            'fl-basis-3.5' => ['flex-basis' => '0.875rem'],
+            // Frações
+            'fl-basis-1/2' => ['flex-basis' => '50%'],
+            'fl-basis-1/3' => ['flex-basis' => '33.333333%'],
+            'fl-basis-2/3' => ['flex-basis' => '66.666667%'],
+            'fl-basis-1/4' => ['flex-basis' => '25%'],
+            'fl-basis-2/4' => ['flex-basis' => '50%'],
+            'fl-basis-3/4' => ['flex-basis' => '75%'],
+            'fl-basis-1/5' => ['flex-basis' => '20%'],
+            'fl-basis-2/5' => ['flex-basis' => '40%'],
+            'fl-basis-3/5' => ['flex-basis' => '60%'],
+            'fl-basis-4/5' => ['flex-basis' => '80%'],
+            'fl-basis-1/6' => ['flex-basis' => '16.666667%'],
+            'fl-basis-2/6' => ['flex-basis' => '33.333333%'],
+            'fl-basis-3/6' => ['flex-basis' => '50%'],
+            'fl-basis-4/6' => ['flex-basis' => '66.666667%'],
+            'fl-basis-5/6' => ['flex-basis' => '83.333333%'],
+            'fl-basis-1/12' => ['flex-basis' => '8.333333%'],
+            'fl-basis-2/12' => ['flex-basis' => '16.666667%'],
+            'fl-basis-3/12' => ['flex-basis' => '25%'],
+            'fl-basis-4/12' => ['flex-basis' => '33.333333%'],
+            'fl-basis-5/12' => ['flex-basis' => '41.666667%'],
+            'fl-basis-6/12' => ['flex-basis' => '50%'],
+            'fl-basis-7/12' => ['flex-basis' => '58.333333%'],
+            'fl-basis-8/12' => ['flex-basis' => '66.666667%'],
+            'fl-basis-9/12' => ['flex-basis' => '75%'],
+            'fl-basis-10/12' => ['flex-basis' => '83.333333%'],
+            'fl-basis-11/12' => ['flex-basis' => '91.666667%'],
+            'fl-basis-full' => ['flex-basis' => '100%'],
+            
+            // Order
+            'fl-order-1' => ['order' => '1'],
+            'fl-order-2' => ['order' => '2'],
+            'fl-order-3' => ['order' => '3'],
+            'fl-order-4' => ['order' => '4'],
+            'fl-order-5' => ['order' => '5'],
+            'fl-order-6' => ['order' => '6'],
+            'fl-order-7' => ['order' => '7'],
+            'fl-order-8' => ['order' => '8'],
+            'fl-order-9' => ['order' => '9'],
+            'fl-order-10' => ['order' => '10'],
+            'fl-order-11' => ['order' => '11'],
+            'fl-order-12' => ['order' => '12'],
+            'fl-order-first' => ['order' => '-9999'],
+            'fl-order-last' => ['order' => '9999'],
+            'fl-order-none' => ['order' => '0'],
+            
+            // Justify Content
+            'fl-justify-normal' => ['justify-content' => 'normal'],
+            'fl-justify-start' => ['justify-content' => 'flex-start'],
+            'fl-justify-end' => ['justify-content' => 'flex-end'],
+            'fl-justify-center' => ['justify-content' => 'center'],
+            'fl-justify-between' => ['justify-content' => 'space-between'],
+            'fl-justify-around' => ['justify-content' => 'space-around'],
+            'fl-justify-evenly' => ['justify-content' => 'space-evenly'],
+            'fl-justify-stretch' => ['justify-content' => 'stretch'],
+            
+            // Justify Items
+            'fl-justify-items-start' => ['justify-items' => 'start'],
+            'fl-justify-items-end' => ['justify-items' => 'end'],
+            'fl-justify-items-center' => ['justify-items' => 'center'],
+            'fl-justify-items-stretch' => ['justify-items' => 'stretch'],
+            
+            // Justify Self
+            'fl-justify-self-auto' => ['justify-self' => 'auto'],
+            'fl-justify-self-start' => ['justify-self' => 'start'],
+            'fl-justify-self-end' => ['justify-self' => 'end'],
+            'fl-justify-self-center' => ['justify-self' => 'center'],
+            'fl-justify-self-stretch' => ['justify-self' => 'stretch'],
+            
+            // Align Content
+            'fl-content-normal' => ['align-content' => 'normal'],
+            'fl-content-center' => ['align-content' => 'center'],
+            'fl-content-start' => ['align-content' => 'flex-start'],
+            'fl-content-end' => ['align-content' => 'flex-end'],
+            'fl-content-between' => ['align-content' => 'space-between'],
+            'fl-content-around' => ['align-content' => 'space-around'],
+            'fl-content-evenly' => ['align-content' => 'space-evenly'],
+            'fl-content-baseline' => ['align-content' => 'baseline'],
+            'fl-content-stretch' => ['align-content' => 'stretch'],
+            
+            // Align Items
+            'fl-items-start' => ['align-items' => 'flex-start'],
+            'fl-items-end' => ['align-items' => 'flex-end'],
+            'fl-items-center' => ['align-items' => 'center'],
+            'fl-items-baseline' => ['align-items' => 'baseline'],
+            'fl-items-stretch' => ['align-items' => 'stretch'],
+            
+            // Align Self
+            'fl-self-auto' => ['align-self' => 'auto'],
+            'fl-self-start' => ['align-self' => 'flex-start'],
+            'fl-self-end' => ['align-self' => 'flex-end'],
+            'fl-self-center' => ['align-self' => 'center'],
+            'fl-self-stretch' => ['align-self' => 'stretch'],
+            'fl-self-baseline' => ['align-self' => 'baseline'],
+
+            // Grid Display
+            'fl-grid' => ['display' => 'grid'],
+            'fl-inline-grid' => ['display' => 'inline-grid'],
+            
+            // Grid Template Columns
+            'fl-grid-cols-1' => ['grid-template-columns' => 'repeat(1, minmax(0, 1fr))'],
+            'fl-grid-cols-2' => ['grid-template-columns' => 'repeat(2, minmax(0, 1fr))'],
+            'fl-grid-cols-3' => ['grid-template-columns' => 'repeat(3, minmax(0, 1fr))'],
+            'fl-grid-cols-4' => ['grid-template-columns' => 'repeat(4, minmax(0, 1fr))'],
+            'fl-grid-cols-5' => ['grid-template-columns' => 'repeat(5, minmax(0, 1fr))'],
+            'fl-grid-cols-6' => ['grid-template-columns' => 'repeat(6, minmax(0, 1fr))'],
+            'fl-grid-cols-7' => ['grid-template-columns' => 'repeat(7, minmax(0, 1fr))'],
+            'fl-grid-cols-8' => ['grid-template-columns' => 'repeat(8, minmax(0, 1fr))'],
+            'fl-grid-cols-9' => ['grid-template-columns' => 'repeat(9, minmax(0, 1fr))'],
+            'fl-grid-cols-10' => ['grid-template-columns' => 'repeat(10, minmax(0, 1fr))'],
+            'fl-grid-cols-11' => ['grid-template-columns' => 'repeat(11, minmax(0, 1fr))'],
+            'fl-grid-cols-12' => ['grid-template-columns' => 'repeat(12, minmax(0, 1fr))'],
+            'fl-grid-cols-none' => ['grid-template-columns' => 'none'],
+            'fl-grid-cols-subgrid' => ['grid-template-columns' => 'subgrid'],
+            
+            // Grid Template Rows
+            'fl-grid-rows-1' => ['grid-template-rows' => 'repeat(1, minmax(0, 1fr))'],
+            'fl-grid-rows-2' => ['grid-template-rows' => 'repeat(2, minmax(0, 1fr))'],
+            'fl-grid-rows-3' => ['grid-template-rows' => 'repeat(3, minmax(0, 1fr))'],
+            'fl-grid-rows-4' => ['grid-template-rows' => 'repeat(4, minmax(0, 1fr))'],
+            'fl-grid-rows-5' => ['grid-template-rows' => 'repeat(5, minmax(0, 1fr))'],
+            'fl-grid-rows-6' => ['grid-template-rows' => 'repeat(6, minmax(0, 1fr))'],
+            'fl-grid-rows-none' => ['grid-template-rows' => 'none'],
+            'fl-grid-rows-subgrid' => ['grid-template-rows' => 'subgrid'],
+            
+            // Grid Column Start/End
+            'fl-col-start-1' => ['grid-column-start' => '1'],
+            'fl-col-start-2' => ['grid-column-start' => '2'],
+            'fl-col-start-3' => ['grid-column-start' => '3'],
+            'fl-col-start-4' => ['grid-column-start' => '4'],
+            'fl-col-start-5' => ['grid-column-start' => '5'],
+            'fl-col-start-6' => ['grid-column-start' => '6'],
+            'fl-col-start-7' => ['grid-column-start' => '7'],
+            'fl-col-start-8' => ['grid-column-start' => '8'],
+            'fl-col-start-9' => ['grid-column-start' => '9'],
+            'fl-col-start-10' => ['grid-column-start' => '10'],
+            'fl-col-start-11' => ['grid-column-start' => '11'],
+            'fl-col-start-12' => ['grid-column-start' => '12'],
+            'fl-col-start-13' => ['grid-column-start' => '13'],
+            'fl-col-start-auto' => ['grid-column-start' => 'auto'],
+            'fl-col-end-1' => ['grid-column-end' => '1'],
+            'fl-col-end-2' => ['grid-column-end' => '2'],
+            'fl-col-end-3' => ['grid-column-end' => '3'],
+            'fl-col-end-4' => ['grid-column-end' => '4'],
+            'fl-col-end-5' => ['grid-column-end' => '5'],
+            'fl-col-end-6' => ['grid-column-end' => '6'],
+            'fl-col-end-7' => ['grid-column-end' => '7'],
+            'fl-col-end-8' => ['grid-column-end' => '8'],
+            'fl-col-end-9' => ['grid-column-end' => '9'],
+            'fl-col-end-10' => ['grid-column-end' => '10'],
+            'fl-col-end-11' => ['grid-column-end' => '11'],
+            'fl-col-end-12' => ['grid-column-end' => '12'],
+            'fl-col-end-13' => ['grid-column-end' => '13'],
+            'fl-col-end-auto' => ['grid-column-end' => 'auto'],
+            
+            // Grid Column Span
+            'fl-col-auto' => ['grid-column' => 'auto'],
+            'fl-col-span-1' => ['grid-column' => 'span 1 / span 1'],
+            'fl-col-span-2' => ['grid-column' => 'span 2 / span 2'],
+            'fl-col-span-3' => ['grid-column' => 'span 3 / span 3'],
+            'fl-col-span-4' => ['grid-column' => 'span 4 / span 4'],
+            'fl-col-span-5' => ['grid-column' => 'span 5 / span 5'],
+            'fl-col-span-6' => ['grid-column' => 'span 6 / span 6'],
+            'fl-col-span-7' => ['grid-column' => 'span 7 / span 7'],
+            'fl-col-span-8' => ['grid-column' => 'span 8 / span 8'],
+            'fl-col-span-9' => ['grid-column' => 'span 9 / span 9'],
+            'fl-col-span-10' => ['grid-column' => 'span 10 / span 10'],
+            'fl-col-span-11' => ['grid-column' => 'span 11 / span 11'],
+            'fl-col-span-12' => ['grid-column' => 'span 12 / span 12'],
+            'fl-col-span-full' => ['grid-column' => '1 / -1'],
+            
+            // Grid Row Start/End
+            'fl-row-start-1' => ['grid-row-start' => '1'],
+            'fl-row-start-2' => ['grid-row-start' => '2'],
+            'fl-row-start-3' => ['grid-row-start' => '3'],
+            'fl-row-start-4' => ['grid-row-start' => '4'],
+            'fl-row-start-5' => ['grid-row-start' => '5'],
+            'fl-row-start-6' => ['grid-row-start' => '6'],
+            'fl-row-start-7' => ['grid-row-start' => '7'],
+            'fl-row-start-auto' => ['grid-row-start' => 'auto'],
+            'fl-row-end-1' => ['grid-row-end' => '1'],
+            'fl-row-end-2' => ['grid-row-end' => '2'],
+            'fl-row-end-3' => ['grid-row-end' => '3'],
+            'fl-row-end-4' => ['grid-row-end' => '4'],
+            'fl-row-end-5' => ['grid-row-end' => '5'],
+            'fl-row-end-6' => ['grid-row-end' => '6'],
+            'fl-row-end-7' => ['grid-row-end' => '7'],
+            'fl-row-end-auto' => ['grid-row-end' => 'auto'],
+            
+            // Grid Row Span
+            'fl-row-auto' => ['grid-row' => 'auto'],
+            'fl-row-span-1' => ['grid-row' => 'span 1 / span 1'],
+            'fl-row-span-2' => ['grid-row' => 'span 2 / span 2'],
+            'fl-row-span-3' => ['grid-row' => 'span 3 / span 3'],
+            'fl-row-span-4' => ['grid-row' => 'span 4 / span 4'],
+            'fl-row-span-5' => ['grid-row' => 'span 5 / span 5'],
+            'fl-row-span-6' => ['grid-row' => 'span 6 / span 6'],
+            'fl-row-span-full' => ['grid-row' => '1 / -1'],
+            
+            // Grid Auto Flow
+            'fl-grid-flow-row' => ['grid-auto-flow' => 'row'],
+            'fl-grid-flow-col' => ['grid-auto-flow' => 'column'],
+            'fl-grid-flow-dense' => ['grid-auto-flow' => 'dense'],
+            'fl-grid-flow-row-dense' => ['grid-auto-flow' => 'row dense'],
+            'fl-grid-flow-col-dense' => ['grid-auto-flow' => 'column dense'],
+            
+            // Grid Auto Columns
+            'fl-auto-cols-auto' => ['grid-auto-columns' => 'auto'],
+            'fl-auto-cols-min' => ['grid-auto-columns' => 'min-content'],
+            'fl-auto-cols-max' => ['grid-auto-columns' => 'max-content'],
+            'fl-auto-cols-fr' => ['grid-auto-columns' => 'minmax(0, 1fr)'],
+            
+            // Grid Auto Rows
+            'fl-auto-rows-auto' => ['grid-auto-rows' => 'auto'],
+            'fl-auto-rows-min' => ['grid-auto-rows' => 'min-content'],
+            'fl-auto-rows-max' => ['grid-auto-rows' => 'max-content'],
+            'fl-auto-rows-fr' => ['grid-auto-rows' => 'minmax(0, 1fr)'],
+            
+            // Place Content
+            'fl-place-content-center' => ['place-content' => 'center'],
+            'fl-place-content-start' => ['place-content' => 'start'],
+            'fl-place-content-end' => ['place-content' => 'end'],
+            'fl-place-content-between' => ['place-content' => 'space-between'],
+            'fl-place-content-around' => ['place-content' => 'space-around'],
+            'fl-place-content-evenly' => ['place-content' => 'space-evenly'],
+            'fl-place-content-baseline' => ['place-content' => 'baseline'],
+            'fl-place-content-stretch' => ['place-content' => 'stretch'],
+            
+            // Place Items
+            'fl-place-items-start' => ['place-items' => 'start'],
+            'fl-place-items-end' => ['place-items' => 'end'],
+            'fl-place-items-center' => ['place-items' => 'center'],
+            'fl-place-items-baseline' => ['place-items' => 'baseline'],
+            'fl-place-items-stretch' => ['place-items' => 'stretch'],
+            
+            // Place Self
+            'fl-place-self-auto' => ['place-self' => 'auto'],
+            'fl-place-self-start' => ['place-self' => 'start'],
+            'fl-place-self-end' => ['place-self' => 'end'],
+            'fl-place-self-center' => ['place-self' => 'center'],
+            'fl-place-self-stretch' => ['place-self' => 'stretch'],
+
+            // Gap (compartilhado entre Flexbox e Grid)
+            'fl-gap-0' => ['gap' => '0px'],
+            'fl-gap-x-0' => ['column-gap' => '0px'],
+            'fl-gap-y-0' => ['row-gap' => '0px'],
+            'fl-gap-px' => ['gap' => '1px'],
+            'fl-gap-x-px' => ['column-gap' => '1px'],
+            'fl-gap-y-px' => ['row-gap' => '1px'],
+            'fl-gap-0.5' => ['gap' => '0.125rem'],
+            'fl-gap-x-0.5' => ['column-gap' => '0.125rem'],
+            'fl-gap-y-0.5' => ['row-gap' => '0.125rem'],
+            'fl-gap-1' => ['gap' => '0.25rem'],
+            'fl-gap-x-1' => ['column-gap' => '0.25rem'],
+            'fl-gap-y-1' => ['row-gap' => '0.25rem'],
+            'fl-gap-1.5' => ['gap' => '0.375rem'],
+            'fl-gap-x-1.5' => ['column-gap' => '0.375rem'],
+            'fl-gap-y-1.5' => ['row-gap' => '0.375rem'],
+            'fl-gap-2' => ['gap' => '0.5rem'],
+            'fl-gap-x-2' => ['column-gap' => '0.5rem'],
+            'fl-gap-y-2' => ['row-gap' => '0.5rem'],
+            'fl-gap-2.5' => ['gap' => '0.625rem'],
+            'fl-gap-x-2.5' => ['column-gap' => '0.625rem'],
+            'fl-gap-y-2.5' => ['row-gap' => '0.625rem'],
+            'fl-gap-3' => ['gap' => '0.75rem'],
+            'fl-gap-x-3' => ['column-gap' => '0.75rem'],
+            'fl-gap-y-3' => ['row-gap' => '0.75rem'],
+            'fl-gap-3.5' => ['gap' => '0.875rem'],
+            'fl-gap-x-3.5' => ['column-gap' => '0.875rem'],
+            'fl-gap-y-3.5' => ['row-gap' => '0.875rem'],
+            'fl-gap-4' => ['gap' => '1rem'],
+            'fl-gap-x-4' => ['column-gap' => '1rem'],
+            'fl-gap-y-4' => ['row-gap' => '1rem'],
+            'fl-gap-5' => ['gap' => '1.25rem'],
+            'fl-gap-x-5' => ['column-gap' => '1.25rem'],
+            'fl-gap-y-5' => ['row-gap' => '1.25rem'],
+            'fl-gap-6' => ['gap' => '1.5rem'],
+            'fl-gap-x-6' => ['column-gap' => '1.5rem'],
+            'fl-gap-y-6' => ['row-gap' => '1.5rem'],
+            'fl-gap-7' => ['gap' => '1.75rem'],
+            'fl-gap-x-7' => ['column-gap' => '1.75rem'],
+            'fl-gap-y-7' => ['row-gap' => '1.75rem'],
+            'fl-gap-8' => ['gap' => '2rem'],
+            'fl-gap-x-8' => ['column-gap' => '2rem'],
+            'fl-gap-y-8' => ['row-gap' => '2rem'],
+            'fl-gap-9' => ['gap' => '2.25rem'],
+            'fl-gap-x-9' => ['column-gap' => '2.25rem'],
+            'fl-gap-y-9' => ['row-gap' => '2.25rem'],
+            'fl-gap-10' => ['gap' => '2.5rem'],
+            'fl-gap-x-10' => ['column-gap' => '2.5rem'],
+            'fl-gap-y-10' => ['row-gap' => '2.5rem'],
+            'fl-gap-11' => ['gap' => '2.75rem'],
+            'fl-gap-x-11' => ['column-gap' => '2.75rem'],
+            'fl-gap-y-11' => ['row-gap' => '2.75rem'],
+            'fl-gap-12' => ['gap' => '3rem'],
+            'fl-gap-x-12' => ['column-gap' => '3rem'],
+            'fl-gap-y-12' => ['row-gap' => '3rem'],
+            'fl-gap-14' => ['gap' => '3.5rem'],
+            'fl-gap-x-14' => ['column-gap' => '3.5rem'],
+            'fl-gap-y-14' => ['row-gap' => '3.5rem'],
+            'fl-gap-16' => ['gap' => '4rem'],
+            'fl-gap-x-16' => ['column-gap' => '4rem'],
+            'fl-gap-y-16' => ['row-gap' => '4rem'],
+            'fl-gap-20' => ['gap' => '5rem'],
+            'fl-gap-x-20' => ['column-gap' => '5rem'],
+            'fl-gap-y-20' => ['row-gap' => '5rem'],
+            'fl-gap-24' => ['gap' => '6rem'],
+            'fl-gap-x-24' => ['column-gap' => '6rem'],
+            'fl-gap-y-24' => ['row-gap' => '6rem'],
+            'fl-gap-28' => ['gap' => '7rem'],
+            'fl-gap-x-28' => ['column-gap' => '7rem'],
+            'fl-gap-y-28' => ['row-gap' => '7rem'],
+            'fl-gap-32' => ['gap' => '8rem'],
+            'fl-gap-x-32' => ['column-gap' => '8rem'],
+            'fl-gap-y-32' => ['row-gap' => '8rem'],
+            'fl-gap-36' => ['gap' => '9rem'],
+            'fl-gap-x-36' => ['column-gap' => '9rem'],
+            'fl-gap-y-36' => ['row-gap' => '9rem'],
+            'fl-gap-40' => ['gap' => '10rem'],
+            'fl-gap-x-40' => ['column-gap' => '10rem'],
+            'fl-gap-y-40' => ['row-gap' => '10rem'],
+            'fl-gap-44' => ['gap' => '11rem'],
+            'fl-gap-x-44' => ['column-gap' => '11rem'],
+            'fl-gap-y-44' => ['row-gap' => '11rem'],
+            'fl-gap-48' => ['gap' => '12rem'],
+            'fl-gap-x-48' => ['column-gap' => '12rem'],
+            'fl-gap-y-48' => ['row-gap' => '12rem'],
+            'fl-gap-52' => ['gap' => '13rem'],
+            'fl-gap-x-52' => ['column-gap' => '13rem'],
+            'fl-gap-y-52' => ['row-gap' => '13rem'],
+            'fl-gap-56' => ['gap' => '14rem'],
+            'fl-gap-x-56' => ['column-gap' => '14rem'],
+            'fl-gap-y-56' => ['row-gap' => '14rem'],
+            'fl-gap-60' => ['gap' => '15rem'],
+            'fl-gap-x-60' => ['column-gap' => '15rem'],
+            'fl-gap-y-60' => ['row-gap' => '15rem'],
+            'fl-gap-64' => ['gap' => '16rem'],
+            'fl-gap-x-64' => ['column-gap' => '16rem'],
+            'fl-gap-y-64' => ['row-gap' => '16rem'],
+            'fl-gap-72' => ['gap' => '18rem'],
+            'fl-gap-x-72' => ['column-gap' => '18rem'],
+            'fl-gap-y-72' => ['row-gap' => '18rem'],
+            'fl-gap-80' => ['gap' => '20rem'],
+            'fl-gap-x-80' => ['column-gap' => '20rem'],
+            'fl-gap-y-80' => ['row-gap' => '20rem'],
+            'fl-gap-96' => ['gap' => '24rem'],
+            'fl-gap-x-96' => ['column-gap' => '24rem'],
+            'fl-gap-y-96' => ['row-gap' => '24rem'],
+
+            // Container Responsivo
+            'fl-container' => [
+                'width' => '100%',
+                '@media (min-width: 640px)' => ['max-width' => '640px'],
+                '@media (min-width: 768px)' => ['max-width' => '768px'],
+                '@media (min-width: 1024px)' => ['max-width' => '1024px'],
+                '@media (min-width: 1280px)' => ['max-width' => '1280px'],
+                '@media (min-width: 1536px)' => ['max-width' => '1536px'],
+            ],
+        ];
     }
 }
