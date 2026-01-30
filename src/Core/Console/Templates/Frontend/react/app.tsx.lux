@@ -1,0 +1,7 @@
+import { createReactApp } from 'ludelix-connect/react'
+{{TAILWIND_IMPORT}}
+
+createReactApp({
+  el: '#app',
+  resolve: (name) => import(`../templates/screens/${name}.tsx`)
+})

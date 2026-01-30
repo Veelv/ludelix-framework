@@ -1,0 +1,9 @@
+<script{{SCRIPT_LANG}}>
+  export let user
+</script>
+
+<div class="container">
+  <h1>Dashboard</h1>
+  <p>Welcome, {user.name}!</p>
+  <p>Email: {user.email}</p>
+</div>

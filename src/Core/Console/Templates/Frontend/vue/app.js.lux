@@ -1,0 +1,7 @@
+import { createVueApp } from 'ludelix-connect/vue'
+{{TAILWIND_IMPORT}}
+
+createVueApp({
+  el: '#app',
+  resolve: (name) => import(`../templates/screens/${name}.vue`)
+})

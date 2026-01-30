@@ -1,0 +1,19 @@
+{
+  "name": "{{APP_NAME}}",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "{{BUILD_COMMAND}}",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ludelix-connect": "file:../framework/ludelix-connect",
+    "svelte": "^4.2.8"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.0.1",
+    "vite": "^5.0.8"{{TYPESCRIPT_DEPS}}{{TAILWIND_DEPS}}
+  }
+}

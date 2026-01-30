@@ -1,0 +1,15 @@
+<script{{SCRIPT_LANG}}>
+export default {
+  props: {
+    user: Object
+  }
+}
+</script>
+
+<template>
+  <div class="container">
+    <h1>Dashboard</h1>
+    <p>Welcome, {{ user.name }}!</p>
+    <p>Email: {{ user.email }}</p>
+  </div>
+</template>

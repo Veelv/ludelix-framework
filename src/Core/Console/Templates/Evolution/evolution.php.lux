@@ -1,0 +1,29 @@
+<?php
+
+use Ludelix\Database\Evolution\Core\SchemaEvolution;
+use Ludelix\Database\Evolution\Builders\TableEvolution;
+
+class {{className}} extends SchemaEvolution
+{
+    public function forward(): void
+    {
+        $this->createTable('{{tableName}}', function (TableEvolution $table) {
+            $table->bigint('id')->autoIncrement()->primary();
+            $table->string('name');
+            $table->timestamps();
+        });
+    }
+
+    public function backward(): void
+    {
+        $this->dropTable('{{tableName}}');
+    }
+
+    public function dependencies(): array
+    {
+        return [
+            'requires' => [],
+            'conflicts' => []
+        ];
+    }
+}

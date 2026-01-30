@@ -1,0 +1,9 @@
+{{TYPESCRIPT_INTERFACE}}export default function Dashboard({{PROPS}}) {
+  return (
+    <div className="container">
+      <h1>Dashboard</h1>
+      <p>Welcome, {user.name}!</p>
+      <p>Email: {user.email}</p>
+    </div>
+  )
+}

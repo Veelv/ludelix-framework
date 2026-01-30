@@ -1,0 +1,93 @@
+<?php
+
+namespace {{namespace}};
+
+use Ludelix\Core\RestController;
+use Ludelix\PRT\Request;
+use Ludelix\PRT\Response;
+use Ludelix\ApiExplorer\Attributes\ApiEndpoint;
+use Ludelix\ApiExplorer\Attributes\QueryParam;
+use Ludelix\ApiExplorer\Attributes\BodyParam;
+use Ludelix\ApiExplorer\Attributes\ApiResponse;
+
+class {{className}} extends RestController
+{
+    /**
+     * List resources (GET /resource)
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @return mixed
+     */
+    #[ApiEndpoint(summary: "List all {{className}} items", tags: ["{{className}}"])]
+    #[QueryParam(name: "page", type: "int", description: "The page number for pagination")]
+    #[ApiResponse(status: 200, description: "Returns a list of items")]
+    public function index(Request $request, $response)
+    {
+        return $this->success(['message' => 'Listing all items from {{className}}']);
+    }
+
+    /**
+     * Show a specific resource (GET /resource/{id})
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @param mixed $id
+     * @return mixed
+     */
+    #[ApiEndpoint(summary: "Show details of a single {{className}} item", tags: ["{{className}}"])]
+    #[ApiResponse(status: 200, description: "Returns the requested item")]
+    #[ApiResponse(status: 404, description: "Item not found")]
+    public function show(Request $request, $response, $id)
+    {
+        return $this->success(['id' => $id, 'item' => 'Data from {{className}}']);
+    }
+
+    /**
+     * Create a new resource (POST /resource)
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @return mixed
+     */
+    #[ApiEndpoint(summary: "Create a new {{className}} record", tags: ["{{className}}"])]
+    #[BodyParam(name: "name", type: "string", required: true, description: "Name of the item", rules: "required|min:3|max:255")]
+    #[ApiResponse(status: 201, description: "Item created successfully")]
+    public function store(Request $request, $response)
+    {
+        $data = $request->all();
+        return $this->success(['message' => 'Created new item in {{className}}', 'data' => $data]);
+    }
+
+    /**
+     * Update a resource (PUT /resource/{id})
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @param mixed $id
+     * @return mixed
+     */
+    #[ApiEndpoint(summary: "Update an existing {{className}} record", tags: ["{{className}}"])]
+    #[BodyParam(name: "name", type: "string", required: false, description: "Updated name", rules: "min:3|max:255")]
+    #[ApiResponse(status: 200, description: "Item updated successfully")]
+    public function update(Request $request, $response, $id)
+    {
+        $data = $request->all();
+        return $this->success(['id' => $id, 'message' => 'Updated item in {{className}}', 'data' => $data]);
+    }
+
+    /**
+     * Delete a resource (DELETE /resource/{id})
+     *
+     * @param Request $request
+     * @param mixed $response
+     * @param mixed $id
+     * @return mixed
+     */
+    #[ApiEndpoint(summary: "Delete a {{className}} record", tags: ["{{className}}"])]
+    #[ApiResponse(status: 200, description: "Item deleted successfully")]
+    public function destroy(Request $request, $response, $id)
+    {
+        return $this->success(['id' => $id, 'message' => 'Deleted item in {{className}}']);
+    }
+}

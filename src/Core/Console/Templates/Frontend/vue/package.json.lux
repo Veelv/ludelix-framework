@@ -1,0 +1,19 @@
+{
+  "name": "{{APP_NAME}}",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "{{BUILD_COMMAND}}",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ludelix-connect": "file:../framework/ludelix-connect",
+    "vue": "^3.3.11"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.0.8"{{TYPESCRIPT_DEPS}}{{TAILWIND_DEPS}}
+  }
+}

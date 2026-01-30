@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="#[locale()]">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    #[connect:meta]
+    <title #[connect:title]>#[config('app.name')]</title>
+    #[connect:vite ['frontend/js/app.ts']]
+    #[connect:head]
+</head>
+<body>
+    #[connect:root]
+</body>
+</html>

@@ -1,0 +1,7 @@
+import { createSvelteApp } from 'ludelix-connect/svelte'
+{{TAILWIND_IMPORT}}
+
+createSvelteApp({
+  el: '#app',
+  resolve: (name) => import(`../templates/screens/${name}.svelte`)
+})
