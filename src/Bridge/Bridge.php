@@ -60,6 +60,7 @@ use Ludelix\Validation\Core\ValidationEngine;
  * @package Ludelix\Bridge
  * @author Ludelix Framework Team
  * @version 1.0.0
+ * @see Version
  * @since 1.0.0
  * 
  * @example Basic Usage:
@@ -554,7 +555,7 @@ class Bridge implements BridgeInterface
 
             $sessionManager = new \Ludelix\Session\SessionManager($sessionConfig);
 
-            $instance->container->singleton('session', fn () => $sessionManager);
+            $instance->container->singleton('session', fn() => $sessionManager);
         }
 
         return $instance->get('session');

@@ -12,7 +12,7 @@ use Ludelix\Core\Console\Commands\Core\BaseCommand;
  * 
  * @package Ludelix\Core\Console\Commands\Core
  * @author Ludelix Framework Team
- * @version 2.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 class AboutCommand extends BaseCommand
@@ -39,7 +39,7 @@ class AboutCommand extends BaseCommand
         $this->displayFrameworkInfo();
         $this->displayEnvironmentInfo();
         $this->displaySystemInfo();
-        
+
         return 0;
     }
 
@@ -48,10 +48,36 @@ class AboutCommand extends BaseCommand
      */
     protected function displayFrameworkInfo(): void
     {
+        $frameworkVersion = \Ludelix\Core\Version::get();
+        $consoleVersion = \Ludelix\Core\Console\Version::get();
+
+        // Component Versions
+        $bridgeVersion = \Ludelix\Bridge\Version::get();
+        $apiExplorerVersion = \Ludelix\ApiExplorer\Version::get();
+        $fluidVersion = \Ludelix\Fluid\Version::get();
+        $graphQLVersion = \Ludelix\GraphQL\Version::get();
+        $ludouVersion = \Ludelix\Ludou\Version::get();
+        $routingVersion = \Ludelix\Routing\Version::get();
+        $translationVersion = \Ludelix\Translation\Version::get();
+        $webSocketVersion = \Ludelix\WebSocket\Version::get();
+
         $this->info('🏹 Ludelix Framework');
         $this->line('');
-        $this->line('  Version .................. 1.0.0');
-        $this->line('  Console Version .......... 2.0.0');
+        $this->line('  Version .................. ' . $frameworkVersion);
+        $this->line('  Console Version .......... ' . $consoleVersion);
+        $this->line('');
+        $this->info('📦 Components');
+        $this->line('  Bridge ................... ' . $bridgeVersion);
+        $this->line('  ApiExplorer .............. ' . $apiExplorerVersion);
+        $this->line('  Fluid .................... ' . $fluidVersion);
+        $this->line('  GraphQL .................. ' . $graphQLVersion);
+        $this->line('  Ludou .................... ' . $ludouVersion);
+        $this->line('  Routing .................. ' . $routingVersion);
+        $this->line('  Translation .............. ' . $translationVersion);
+        $this->line('  WebSocket ................ ' . $webSocketVersion);
+        $this->line('');
+
+        $this->info('🏗️  System Architecture');
         $this->line('  Architecture ............. Multi-tenant');
         $this->line('  Template Engine .......... Ludou');
         $this->line('  Database ORM ............. Evolution');
@@ -86,7 +112,7 @@ class AboutCommand extends BaseCommand
         $this->line('  Memory Limit ............. ' . ini_get('memory_limit'));
         $this->line('  Max Execution Time ....... ' . ini_get('max_execution_time') . 's');
         $this->line('');
-        
+
         $this->displayExtensions();
     }
 
@@ -97,7 +123,7 @@ class AboutCommand extends BaseCommand
     {
         $this->info('📦 Extensions');
         $this->line('');
-        
+
         $extensions = [
             'PDO' => extension_loaded('pdo'),
             'MySQL' => extension_loaded('pdo_mysql'),
@@ -117,7 +143,7 @@ class AboutCommand extends BaseCommand
             $status = $loaded ? '✅ LOADED' : '❌ NOT LOADED';
             $this->line('  ' . str_pad($name, 20) . ' ' . $status);
         }
-        
+
         $this->line('');
     }
 }

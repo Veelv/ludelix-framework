@@ -15,7 +15,7 @@ use Ludelix\Core\Console\Support\HelpFormatter;
  * extensions, and provides a unified interface for the CLI.
  *
  * @package Ludelix\Core\Console
- * @version 1.0.0
+ * @version 1.0.1
  */
 class Mi
 {
@@ -279,9 +279,12 @@ class Mi
      */
     protected function showVersion(): void
     {
-        echo "🏹 Mi - Ludelix Framework Console v2.0.0\n";
+        $consoleVersion = \Ludelix\Core\Console\Version::get();
+        $frameworkVersion = \Ludelix\Core\Version::get();
+
+        echo "🏹 Mi - Ludelix Framework Console v" . $consoleVersion . "\n";
         echo "PHP Version: " . PHP_VERSION . "\n";
-        echo "Framework Version: 1.0.0\n";
+        echo "Framework Version: " . $frameworkVersion . "\n";
     }
 
     /**

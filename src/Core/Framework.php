@@ -89,7 +89,7 @@ class Framework implements FrameworkInterface
 
     public function version(): string
     {
-        return '1.0.0';
+        return Version::get();
     }
 
     public function basePath(): string
